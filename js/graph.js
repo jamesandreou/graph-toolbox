@@ -1,22 +1,10 @@
 'use strict';
-
-$(window).ready(function(){
-	var app = {'canvas' : document.getElementById('canvas'), 
-				'2d' : canvas.getContext('2d'),
-				'g' : {v : [], e : []},
-				'tool' : 1, // 1 - Select, 2 - Add Vertice, 3 - Add Edge, 4 - Delete
-				'bound' : null
-			};
-	resizeCanvas(app);
-	initEventListeners(app);
-	app['g'].v.push(new Vertice("1", 100, 100, '#32cd32'));
-	app['g'].v.push(new Vertice("2", 400, 200, '#ff0000'));
-	app['g'].e.push(new Edge(app['g'].v[0], app['g'].v[1], null, null));
-	draw(app);
-});
+/* 
+   	Graph Theory Visual Web App
+    Written by James Andreou, University of Waterloo
+*/
 
 /* Base Objects */
-
 
 function Vertice(label, x, y, col) {
     this.label = label;
@@ -44,6 +32,7 @@ function Edge(v1, v2, dir, weight){
 /* Canvas Drawing Functions */
 
 function draw(app){
+	app['2d'].clearRect(0, 0, app['canvas'].width, app['canvas'].height);
 	drawBackground(app);
 	for(var i = 0; i < app['g'].e.length; i++){
 		drawEdge(app, app['g'].e[i]);
@@ -117,16 +106,37 @@ function initEventListeners(app){
 		app['tools'] = 4;
 	});
 	$("#canvas").mousedown(function(e){
+		e.preventDefault();
 	    var x = Math.floor(e.pageX-$("#canvas").offset().left);
 	    var y = Math.floor(e.pageY-$("#canvas").offset().top);
-	    if(app['bound'] === null){
-	    	app['bound'] = findObjectAt(app, x, y);
-	    	console.log(app['bound']);
+	    switch(app['tool']){
+	    	case 1:
+	    		app['bound'] = selectObject(app, x, y);
+	    		break;
 	    }
+	    draw(app);
  	});
  	$("#canvas").mouseup(function(e){
+ 		e.preventDefault();
 	    app['bound'] = null;
+	    app['boundType'] = null;
+	    draw(app);
  	});
+ 	$('#canvas').mousemove(function(e){
+ 		e.preventDefault();
+ 		if(app['bound'] === null) return;
+ 		var x = Math.floor(e.pageX-$("#canvas").offset().left);
+	    var y = Math.floor(e.pageY-$("#canvas").offset().top);
+ 		moveObject(app, x, y);
+ 	});
+}
+
+function moveObject(app, x, y){
+	if(app['boundType'] === 'v'){
+ 		app['bound'].x = x;
+ 		app['bound'].y = y;
+ 	}
+ 	draw(app);
 }
 
 /* Helper functions for UI */
@@ -138,13 +148,16 @@ function resizeCanvas(app){
 	app['canvas'].height = $('.canvas-container').height();
 }
 
-function findObjectAt(app, x, y){
+function selectObject(app, x, y){
 	var r = app['canvas'].width / 80;
 	for(var i = 0; i < app['g'].v.length; i++){
 		var v = app['g'].v[i];
 		app['2d'].beginPath();
 		app['2d'].arc(v.x, v.y, r, 0, Math.PI * 2, false);
-		if(app['2d'].isPointInPath(x, y)) return v;
+		if(app['2d'].isPointInPath(x, y)){
+			app['boundType'] = 'v';
+			return v;
+		} 
 		app['2d'].closePath();
 	}
 	for(var i = 0; i < app['g'].e.length; i++){
@@ -158,9 +171,26 @@ function findObjectAt(app, x, y){
             var c = Math.sqrt((o.v1.x - x) * (o.v1.x - x) +
                               (o.v1.y - y) * (o.v1.y - y));
             if(a <= b + c + 1 && a > b + c - 1){
+            	app['boundType'] = 'e';
                 return o;
             }
 		}
 	}
 	return null;
 }
+
+$(window).ready(function(){
+	var app = {'canvas' : document.getElementById('canvas'), 
+				'2d' : canvas.getContext('2d'),
+				'g' : {v : [], e : []},
+				'tool' : 1, // 1 - Select, 2 - Add Vertice, 3 - Add Edge, 4 - Delete
+				'bound' : null,
+				'boundType' : null
+			};
+	resizeCanvas(app);
+	initEventListeners(app);
+	app['g'].v.push(new Vertice("1", 100, 100, '#32cd32'));
+	app['g'].v.push(new Vertice("2", 400, 200, '#ff0000'));
+	app['g'].e.push(new Edge(app['g'].v[0], app['g'].v[1], null, null));
+	draw(app);
+});
