@@ -15,7 +15,7 @@
 	width: 20%;
 	height: 100%;
 	order: 1;
-	background: #222222;
+	background: #1e1e1e;
 }
 
 .canvas-container{
@@ -24,6 +24,19 @@
 	order: 2;
 }
 
+.tools-container{
+	display: flex;
+	flex-flow: row, nowrap;
+	padding: 12px;
+}
+
 .tool{
-	color: white;
+	color: #5c5c5c;
+	width: 50%;
+	text-align: center;
+}
+
+h2{
+	color: #5c5c5c;
+	text-align: center;
 }
