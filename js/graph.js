@@ -28,6 +28,18 @@ function Edge(v1, v2, dir, weight){
 	}
 	this.curveX = 0;
 	this.curveY = 0;
+	this.cx = 0;
+	this.cy = 0;
+	// Avoid recalculating bezier control point constantly, save alot of cpu
+	this.cacheControlPoint = function(){
+		// Calculate control points based off bezier function at t = 0.5, derivative critical point
+		// I rearranged the equation for x,y respectively given x0,x1 and t = 0.5
+		// Interesting that it simplifies down to c = (P / 0.25 -P1-P2) / 2
+		var px = (this.v2.x - this.v1.x) / 2 + this.v1.x + this.curveX;
+		var py = (this.v2.y - this.v1.y) / 2 + this.v1.y + this.curveY;
+		this.c1 = (px / 0.25 - this.v2.x - this.v1.x) / 2;
+		this.c2 = (py / 0.25 - this.v2.y - this.v1.y) / 2;
+	}
 }
 
 /* Canvas Drawing Functions */
@@ -83,23 +95,11 @@ function drawVertice(app, v){
 }
 
 function drawEdge(app, e){
-	// Calculate control points based off bezier function at t = 0.5
-	// I rearranged the equation for x,y respectively given x0,x1 and t = 0.5
-	// Interesting that it simplifies down to c = (P / 0.25 -P1-P2) / 2
-	var px = (e.v2.x - e.v1.x) / 2 + e.v1.x + e.curveX;
-	var py = (e.v2.y - e.v1.y) / 2 + e.v1.y + e.curveY;
-	var c1 = (px / 0.25 - e.v2.x - e.v1.x) / 2;
-	var c2 = (py / 0.25 - e.v2.y - e.v1.y) / 2;
 	app['2d'].strokeStyle = '#000000';
 	app['2d'].lineWidth = e === app['bound'] ? 4 : 2;
 	app['2d'].beginPath();
 	app['2d'].moveTo(e.v1.x, e.v1.y);
-	if(e.curveX === 0 && e.curveY === 0){
-		app['2d'].lineTo(e.v2.x, e.v2.y);
-	}else{
-		app['2d'].quadraticCurveTo(c1, c2, e.v2.x, e.v2.y);
-
-	}
+	app['2d'].quadraticCurveTo(e.c1, e.c2, e.v2.x, e.v2.y);
 	app['2d'].stroke();
 	app['2d'].closePath();
 }
@@ -191,10 +191,16 @@ function moveObject(app, x, y){
 	if(app['boundType'] === 'v'){
  		o.x = x;
  		o.y = y;
+ 		for(var i = 0; i < app['g'].e.length; i++){
+ 			var e = app['g'].e[i];
+ 			if(e.v1 === o || e.v2 === o){
+ 				e.cacheControlPoint();
+ 			}
+ 		}
  	}else if(app['boundType'] === 'e'){
  		o.curveX = x - ((o.v2.x - o.v1.x) / 2 + o.v1.x);
  		o.curveY = y - ((o.v2.y - o.v1.y) / 2 + o.v1.y);
- 		console.log(y + " " + o.v1.y + " " + o.curveY);
+ 		o.cacheControlPoint();
  	}
  	draw(app);
 }
@@ -246,15 +252,11 @@ function selectObject(app, x, y){
 	for(var i = 0; i < app['g'].e.length; i++){
 		var e = app['g'].e[i];
 		// Create path surrounding the curves bezier curve with two more bezier curves shifted
-		var px = (e.v2.x - e.v1.x) / 2 + e.v1.x + e.curveX;
-		var py = (e.v2.y - e.v1.y) / 2 + e.v1.y + e.curveY;
-		var c1 = (px / 0.25 - e.v2.x - e.v1.x) / 2;
-		var c2 = (py / 0.25 - e.v2.y - e.v1.y) / 2;
 		app['2d'].beginPath();
 		app['2d'].moveTo(e.v1.x - 8, e.v1.y - 8);
-		app['2d'].quadraticCurveTo(c1 + 8, c2 - 8, e.v2.x + 8, e.v2.y - 8);
+		app['2d'].quadraticCurveTo(e.c1 + 8, e.c2 - 8, e.v2.x + 8, e.v2.y - 8);
 		app['2d'].lineTo(e.v2.x - 8, e.v2.y + 8);
-		app['2d'].quadraticCurveTo(c1 - 8, c2 + 8, e.v1.x + 8, e.v1.y + 8);
+		app['2d'].quadraticCurveTo(e.c1 - 8, e.c2 + 8, e.v1.x + 8, e.v1.y + 8);
 		app['2d'].lineTo(e.v1.x - 8, e.v1.y - 8);
 		if(app['2d'].isPointInPath(x, y)){
 			app['2d'].closePath();
@@ -279,14 +281,25 @@ function addE(app, v1, v2, dir, weight){
 function defaultGraph(app){
 	addV(app, "1", 300, 200, 0);
 	addV(app, "2", 700, 400, 1);
-	addV(app, "3", 480, 600, 2);
+	addV(app, "3", 500, 600, 2);
 	addV(app, "4", 600, 50, 3);
+	addV(app, "5", 900, 200, 3);
 	addE(app, 0, 1, null, null);
 	app['g'].e[0].curveX = -50;
 	app['g'].e[0].curveY = -180;
+	addE(app, 2, 4, null, null);
+	app['g'].e[1].curveX = -50;
+	app['g'].e[1].curveY = -180;
+	addE(app, 0, 4, null, null);
+	app['g'].e[2].curveX = 80;
+	app['g'].e[2].curveY = 40;
 	addE(app, 0, 2, null, null);
 	addE(app, 1, 3, null, null);
 	addE(app, 2, 3, null, null);
+	addE(app, 3, 4, null, null);
+	for(var i = 0; i < app['g'].e.length; i++){
+		app['g'].e[i].cacheControlPoint();
+	}
 }
 
 $(window).ready(function(){
