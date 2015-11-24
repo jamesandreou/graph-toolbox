@@ -26,7 +26,8 @@ function Edge(v1, v2, dir, weight){
 	}else{
 		this.weight = null;
 	}
-	this.curve = 0;
+	this.curveX = 0;
+	this.curveY = 0;
 }
 
 /* Canvas Drawing Functions */
@@ -46,6 +47,7 @@ function drawBackground(app){
 	var w = app['canvas'].width, h = app['canvas'].height;
 	var gridSize = Math.min(w, h) / 20;
 	app['2d'].strokeStyle = '#add8e6';
+	app['2d'].lineWidth = 2;
 	// Grid
 	for(var x = 0; x < w; x += gridSize){
 		app['2d'].beginPath();
@@ -70,7 +72,7 @@ function drawVertice(app, v){
 	app['2d'].textAlign = 'center';
 	app['2d'].fillStyle = v.col;
 	app['2d'].strokeStyle = '#000000';
-	app['2d'].lineWidth = 2;
+	app['2d'].lineWidth = v === app['bound'] ? 4 : 2;
 	app['2d'].beginPath();
 	app['2d'].arc(v.x, v.y, r, 0, Math.PI * 2, false);
 	app['2d'].fill();
@@ -81,11 +83,23 @@ function drawVertice(app, v){
 }
 
 function drawEdge(app, e){
+	// Calculate control points based off bezier function at t = 0.5
+	// I rearranged the equation for x,y respectively given x0,x1 and t = 0.5
+	// Interesting that it simplifies down to c = (P / 0.25 -P1-P2) / 2
+	var px = (e.v2.x - e.v1.x) / 2 + e.v1.x + e.curveX;
+	var py = (e.v2.y - e.v1.y) / 2 + e.v1.y + e.curveY;
+	var c1 = (px / 0.25 - e.v2.x - e.v1.x) / 2;
+	var c2 = (py / 0.25 - e.v2.y - e.v1.y) / 2;
 	app['2d'].strokeStyle = '#000000';
-	app['2d'].lineWidth = 2;
+	app['2d'].lineWidth = e === app['bound'] ? 4 : 2;
 	app['2d'].beginPath();
 	app['2d'].moveTo(e.v1.x, e.v1.y);
-	app['2d'].lineTo(e.v2.x, e.v2.y);
+	if(e.curveX === 0 && e.curveY === 0){
+		app['2d'].lineTo(e.v2.x, e.v2.y);
+	}else{
+		app['2d'].quadraticCurveTo(c1, c2, e.v2.x, e.v2.y);
+
+	}
 	app['2d'].stroke();
 	app['2d'].closePath();
 }
@@ -94,9 +108,29 @@ function drawEdge(app, e){
 
 function initEventListeners(app){
 	$(window).resize(function() { resize(app);});
-	$('.tool').click(function(){
+	toolEvents(app);
+	canvasEvents(app);
+}
+
+function toolEvents(app){
+	$('.tool > img').click(function(){
 		selectTool(app, this);
 	});
+	$('.tool > img').mouseenter(function(){
+		if($(this).parent().hasClass('active')) return;
+		var oldSrc = $(this).attr('src');
+		var newSrc = oldSrc.substring(0, oldSrc.length - 5) + '0.svg';
+		$(this).attr('src', newSrc);
+	});
+	$('.tool > img').mouseleave(function(){
+		if($(this).parent().hasClass('active')) return;
+		var oldSrc = $(this).attr('src');
+		var newSrc = oldSrc.substring(0, oldSrc.length - 5) + '1.svg';
+		$(this).attr('src', newSrc);
+	});
+}
+
+function canvasEvents(app){
 	$("#canvas").mousedown(function(e){
 		e.preventDefault();
 	    var x = Math.floor(e.pageX-$("#canvas").offset().left);
@@ -124,7 +158,7 @@ function initEventListeners(app){
 }
 
 function selectTool(app, tool){
-	var id = $(tool).attr('id');
+	var id = $(tool).parent().attr('id');
 	if(id === 'sel-btn'){
 		app['tool'] = 1;
 	}else if(id === 'addv-btn'){
@@ -143,17 +177,24 @@ function selectTool(app, tool){
 		var newSrc = oldSrc.substring(0, oldSrc.length - 5);
 		if($(this).parent().attr('id') === id){
 			newSrc += '0.svg';
+			if(!$(this).parent().hasClass('active')) $(this).parent().addClass('active');
 		}else{
 			newSrc += '1.svg';
+			if($(this).parent().hasClass('active')) $(this).parent().removeClass('active');
 		}
 		$(this).attr('src', newSrc);
 	});
 }
 
 function moveObject(app, x, y){
+	var o = app['bound'];
 	if(app['boundType'] === 'v'){
- 		app['bound'].x = x;
- 		app['bound'].y = y;
+ 		o.x = x;
+ 		o.y = y;
+ 	}else if(app['boundType'] === 'e'){
+ 		o.curveX = x - ((o.v2.x - o.v1.x) / 2 + o.v1.x);
+ 		o.curveY = y - ((o.v2.y - o.v1.y) / 2 + o.v1.y);
+ 		console.log(y + " " + o.v1.y + " " + o.curveY);
  	}
  	draw(app);
 }
@@ -167,8 +208,6 @@ function resize(app){
     var h = $('.canvas-container').height();
 	app['canvas'].width = w;
 	app['canvas'].height = h;
-	$('.tool > img').width($('.panel').width() * 0.25);
-	$('.tool').width(($('.panel').width() - 24) / 3);
 	var r = Math.min(app['canvas'].width, app['canvas'].height) / 40;
 	// If vertices are outside the canvas after resize shift back in
 	for(var i = 0; i < app['g'].v.length; i++){
@@ -179,7 +218,16 @@ function resize(app){
 			v.y -= (v.y - h) + r + 10;
 		}
 	}
-	draw(app);
+	// Resize toolbar
+	$('.tool > img').width($('.panel').width() * 0.25);
+	$('.tool').width(($('.panel').width() - 24) / 3);
+	if($(window).width() < 400){
+		$('h1').css('font-size', 16);
+	}else if($(window).width() < 700){
+		$('h1').css('font-size', 22);
+	}else{
+		$('h1').css('font-size', 36);
+	} 
 	draw(app);
 }
 
@@ -196,37 +244,61 @@ function selectObject(app, x, y){
 		app['2d'].closePath();
 	}
 	for(var i = 0; i < app['g'].e.length; i++){
-		var o = app['g'].e[i];
-		// Linear Distance Check, used if edge is not curved
-		if(o.curve === 0){
-			var a = Math.sqrt((o.v2.x - o.v1.x) * (o.v2.x - o.v1.x) +
-                                  (o.v2.y - o.v1.y) * (o.v2.y - o.v1.y));
-            var b = Math.sqrt((o.v2.x - x) * (o.v2.x - x) +
-                              (o.v2.y - y) * (o.v2.y - y));
-            var c = Math.sqrt((o.v1.x - x) * (o.v1.x - x) +
-                              (o.v1.y - y) * (o.v1.y - y));
-            if(a <= b + c + 1 && a > b + c - 1){
-            	app['boundType'] = 'e';
-                return o;
-            }
+		var e = app['g'].e[i];
+		// Create path surrounding the curves bezier curve with two more bezier curves shifted
+		var px = (e.v2.x - e.v1.x) / 2 + e.v1.x + e.curveX;
+		var py = (e.v2.y - e.v1.y) / 2 + e.v1.y + e.curveY;
+		var c1 = (px / 0.25 - e.v2.x - e.v1.x) / 2;
+		var c2 = (py / 0.25 - e.v2.y - e.v1.y) / 2;
+		app['2d'].beginPath();
+		app['2d'].moveTo(e.v1.x - 8, e.v1.y - 8);
+		app['2d'].quadraticCurveTo(c1 + 8, c2 - 8, e.v2.x + 8, e.v2.y - 8);
+		app['2d'].lineTo(e.v2.x - 8, e.v2.y + 8);
+		app['2d'].quadraticCurveTo(c1 - 8, c2 + 8, e.v1.x + 8, e.v1.y + 8);
+		app['2d'].lineTo(e.v1.x - 8, e.v1.y - 8);
+		if(app['2d'].isPointInPath(x, y)){
+			app['2d'].closePath();
+			app['boundType'] = 'e';
+			return e;
 		}
+		app['2d'].closePath();
 	}
 	return null;
+}
+
+/* Preloaded graphs */
+
+function addV(app, label, x, y, col){
+	app['g'].v.push(new Vertice(label, x, y, app['colors'][col]));
+}
+
+function addE(app, v1, v2, dir, weight){
+	app['g'].e.push(new Edge(app['g'].v[v1], app['g'].v[v2], dir, weight));
+}
+
+function defaultGraph(app){
+	addV(app, "1", 300, 200, 0);
+	addV(app, "2", 700, 400, 1);
+	addV(app, "3", 480, 600, 2);
+	addV(app, "4", 600, 50, 3);
+	addE(app, 0, 1, null, null);
+	app['g'].e[0].curveX = -50;
+	app['g'].e[0].curveY = -180;
+	addE(app, 0, 2, null, null);
+	addE(app, 1, 3, null, null);
+	addE(app, 2, 3, null, null);
 }
 
 $(window).ready(function(){
 	var app = {'canvas' : document.getElementById('canvas'), 
 				'2d' : canvas.getContext('2d'),
 				'g' : {v : [], e : []},
+				'colors' : ['#32cd32', '#ff0000', '#7ec0ee', '#ffff00'], // 1 - green, 2 - red, 3 - blue, 4 - yellow
 				'tool' : 1, // 1 - Select, 2 - Add Vertice, 3 - Add Edge, 4 - Edge Weight, 5 - Edge Dir, 6 - Delete
 				'bound' : null,
 				'boundType' : null
 			};
-	resize(app);
 	initEventListeners(app);
-	app['g'].v.push(new Vertice("1", 100, 100, '#32cd32'));
-	app['g'].v.push(new Vertice("2", 400, 200, '#ff0000'));
-	app['g'].e.push(new Edge(app['g'].v[0], app['g'].v[1], null, null));
-	draw(app);
-	draw(app);
+	defaultGraph(app);
+	resize(app);
 });
