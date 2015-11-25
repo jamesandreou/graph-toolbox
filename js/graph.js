@@ -139,18 +139,35 @@ function canvasEvents(app){
 	    	case 1:
 	    		app['bound'] = selectObject(app, x, y);
 	    		break;
+	    	case 2:
+	    		addV(app, x, y , 0);
+	    		break;
+	    	case 3:
+	    		if(app['boundType'] !== 'v'){
+	    			app['bound'] = selectObject(app, x, y);
+	    		}else{
+	    			var selectSecond = selectObject(app, x, y);
+	    			if(app['boundType'] === 'v'){
+	    				attemptNewEdge(app, selectSecond);
+	    			}else{
+	    				app['bound'] = selectSecond;
+	    			}
+	    		}
+	    		break;
 	    }
 	    draw(app);
  	});
  	$("#canvas").mouseup(function(e){
  		e.preventDefault();
-	    app['bound'] = null;
-	    app['boundType'] = null;
+ 		if(app['tool'] === 1){
+		    app['bound'] = null;
+		    app['boundType'] = null;
+	   	}
 	    draw(app);
  	});
  	$('#canvas').mousemove(function(e){
  		e.preventDefault();
- 		if(app['bound'] === null) return;
+ 		if(app['bound'] === null || app['tool'] !== 1) return;
  		var x = Math.floor(e.pageX-$("#canvas").offset().left);
 	    var y = Math.floor(e.pageY-$("#canvas").offset().top);
  		moveObject(app, x, y);
@@ -265,13 +282,33 @@ function selectObject(app, x, y){
 		}
 		app['2d'].closePath();
 	}
+	app['boundType'] = null;
 	return null;
+}
+
+function attemptNewEdge(app, v2){
+	var v1 = app['bound'];
+	if(v1 !== v2){
+		for(var i = 0; i < app['g'].e.length; i++){
+			var e = app['g'].e[i];
+			if((e.v1 === v1 && e.v2 === v2) || (e.v1 === v2 && e.v2 === v1)){
+				return false;
+			}
+		}
+	}else{
+		return false;
+	}
+	var newEdge = new Edge(v1, v2, null, null);
+	app['g'].e.push(newEdge);
+	newEdge.cacheControlPoint();
+	draw(app);
+	return true;
 }
 
 /* Preloaded graphs */
 
-function addV(app, label, x, y, col){
-	app['g'].v.push(new Vertice(label, x, y, app['colors'][col]));
+function addV(app, x, y, col){
+	app['g'].v.push(new Vertice((app['g'].v.length + 1).toString(), x, y, app['colors'][col]));
 }
 
 function addE(app, v1, v2, dir, weight){
@@ -279,11 +316,11 @@ function addE(app, v1, v2, dir, weight){
 }
 
 function defaultGraph(app){
-	addV(app, "1", 300, 200, 0);
-	addV(app, "2", 700, 400, 1);
-	addV(app, "3", 500, 600, 2);
-	addV(app, "4", 600, 50, 3);
-	addV(app, "5", 900, 200, 3);
+	addV(app, 300, 200, 0);
+	addV(app, 700, 400, 1);
+	addV(app, 500, 600, 2);
+	addV(app, 600, 50, 3);
+	addV(app, 900, 200, 3);
 	addE(app, 0, 1, null, null);
 	app['g'].e[0].curveX = -50;
 	app['g'].e[0].curveY = -180;
