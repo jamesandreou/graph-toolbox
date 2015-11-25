@@ -30,6 +30,8 @@ function Edge(v1, v2, dir, weight){
 	this.curveY = 0;
 	this.cx = 0;
 	this.cy = 0;
+	this.wx = 0;
+	this.wy = 0;
 	// Avoid recalculating bezier control point constantly, save alot of cpu
 	this.cacheControlPoint = function(){
 		// Calculate control points based off bezier function at t = 0.5, derivative critical point
@@ -39,6 +41,8 @@ function Edge(v1, v2, dir, weight){
 		var py = (this.v2.y - this.v1.y) / 2 + this.v1.y + this.curveY;
 		this.c1 = (px / 0.25 - this.v2.x - this.v1.x) / 2;
 		this.c2 = (py / 0.25 - this.v2.y - this.v1.y) / 2;
+		this.wx = px;
+		this.wy = py;
 	}
 }
 
@@ -95,6 +99,7 @@ function drawVertice(app, v){
 }
 
 function drawEdge(app, e){
+	var r = Math.min(app['canvas'].width, app['canvas'].height) / 40;
 	app['2d'].strokeStyle = '#000000';
 	app['2d'].lineWidth = e === app['bound'] ? 4 : 2;
 	app['2d'].beginPath();
@@ -102,6 +107,47 @@ function drawEdge(app, e){
 	app['2d'].quadraticCurveTo(e.c1, e.c2, e.v2.x, e.v2.y);
 	app['2d'].stroke();
 	app['2d'].closePath();
+	// Draw weight of edge
+	if(e.weight !== null){
+		app['2d'].font = 'bolder ' + (r / 1.5 * 1.25) + 'px Georgia';
+		app['2d'].textBaseline = 'middle';
+		app['2d'].textAlign = 'center';
+		app['2d'].beginPath();
+		var w = app['2d'].measureText(e.weight.toString()).width + app['2d'].lineWidth;
+		var h = r * 1.25;
+		app['2d'].rect(e.wx-w/2, e.wy - h / 2, w, h);
+		app['2d'].fillStyle = '#ffffff';
+		app['2d'].fill();
+		app['2d'].stroke();
+		app['2d'].closePath();
+		app['2d'].fillStyle = '#000000';
+		app['2d'].fillText(e.weight.toString(), e.wx, e.wy);
+	}
+	// Draw directed edge
+	if(e.dir !== null){
+		var v1 = e.dir === e.v1 ? e.v1 : e.v2;
+		var v2 = e.dir === e.v1 ? e.v1 : e.v2;
+		// P = (1-t)^2 * v1 + 2(1-t)t * c + t^2 * v2 for t = 0.1, 10% of the curve
+		var px = 0.9 * 0.9 * v1.x + 2 * 0.1 * 0.9 * e.c1 + 0.1 * 0.1 * v2.x;
+		var py = 0.9 * 0.9 * v1.y + 2 * 0.1 * 0.9 * e.c2 + 0.1 * 0.1 * v2.y;
+		// Close approximation of angle of curve
+		var angle = Math.atan2(v1.y - py, v1.x - px);
+		// Coords of tip of triangle
+		var tipX = v1.x - r * Math.cos(angle);
+		var tipY = v1.y - r * Math.sin(angle);
+		// Midpoint between fat end of triangle
+		var midX = v1.x - 2 * r * Math.cos(angle);
+		var midY = v1.y - 2 * r * Math.sin(angle);
+		// Offset from midpoint, which will be other 2 triangle points
+		var ox = r / 2 * Math.sin(angle);
+		var oy = r / 2 * Math.cos(angle) * -1;
+		app['2d'].beginPath();
+		app['2d'].moveTo(midX + ox, midY + oy);
+		app['2d'].lineTo(midX - ox, midY - oy);
+		app['2d'].lineTo(tipX, tipY);
+		app['2d'].lineTo(midX + ox, midY + oy);
+		app['2d'].fill();
+	}
 }
 
 /* Event Listeners */
@@ -317,22 +363,22 @@ function addE(app, v1, v2, dir, weight){
 
 function defaultGraph(app){
 	addV(app, 300, 200, 0);
-	addV(app, 700, 400, 1);
+	addV(app, 700, 550, 1);
 	addV(app, 500, 600, 2);
 	addV(app, 600, 50, 3);
 	addV(app, 900, 200, 3);
-	addE(app, 0, 1, null, null);
+	addE(app, 0, 1, app['g'].v[0], 5);
 	app['g'].e[0].curveX = -50;
 	app['g'].e[0].curveY = -180;
-	addE(app, 2, 4, null, null);
+	addE(app, 2, 4, app['g'].v[4], 0);
 	app['g'].e[1].curveX = -50;
 	app['g'].e[1].curveY = -180;
 	addE(app, 0, 4, null, null);
 	app['g'].e[2].curveX = 80;
 	app['g'].e[2].curveY = 40;
-	addE(app, 0, 2, null, null);
-	addE(app, 1, 3, null, null);
-	addE(app, 2, 3, null, null);
+	addE(app, 0, 2, app['g'].v[0], 3);
+	addE(app, 1, 3, app['g'].v[3], 14);
+	addE(app, 2, 3, app['g'].v[2], 9);
 	addE(app, 3, 4, null, null);
 	for(var i = 0; i < app['g'].e.length; i++){
 		app['g'].e[i].cacheControlPoint();
