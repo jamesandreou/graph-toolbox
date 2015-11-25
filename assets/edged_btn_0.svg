@@ -49,29 +49,35 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <path
-     inkscape:connector-curvature="0"
-     style="fill:#5c5cff;fill-opacity:0;stroke:#ffffff;stroke-width:4.39292239999999978;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="path3808"
-     d="m 61.803537,32.000001 a 29.803538,29.803538 0 0 1 -59.6070757,0 29.803538,29.803538 0 1 1 59.6070757,0 z" />
-  <path
-     d="M 33.001426,46.692044 7.3709982,32.317056 32.635323,17.307956 z"
-     id="path4258"
-     style="fill:#ffffff;fill-opacity:1;stroke:none"
-     inkscape:connector-curvature="0" />
-  <text
-     xml:space="preserve"
-     style="font-size:43.38973236000000355px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
-     x="32.629036"
-     y="48.101658"
-     id="text6286"
-     sodipodi:linespacing="125%"><tspan
-       sodipodi:role="line"
-       x="32.629036"
-       y="48.101658"
-       id="tspan6288"><tspan
-         x="32.629036"
-         y="48.101658"
-         id="tspan6290"
-         style="fill:#ffffff;fill-opacity:1">?</tspan></tspan></text>
+  <g
+     id="g4998"
+     transform="matrix(0.45502501,-0.32865222,0.5096571,0.71098495,14.515838,4.0844655)"
+     style="fill:#ffffff;fill-opacity:1">
+    <rect
+       ry="3.7132373"
+       y="18.680458"
+       x="-11.15005"
+       height="53.486542"
+       width="10.639083"
+       id="rect4486"
+       style="fill:#ffffff;fill-opacity:1;stroke:none" />
+    <path
+       transform="matrix(0.99936616,0.03559879,-0.03559879,0.99936616,60.122473,10.466311)"
+       inkscape:transform-center-y="-3.1729694"
+       inkscape:transform-center-x="0.084541051"
+       d="M -53.966103,12.745763 -76.4525,13.253713 -65.649199,-6.4740522 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="true"
+       sodipodi:arg2="1.5482109"
+       sodipodi:arg1="0.50101339"
+       sodipodi:r2="6.4929194"
+       sodipodi:r1="12.985839"
+       sodipodi:cy="6.5084748"
+       sodipodi:cx="-65.355934"
+       sodipodi:sides="3"
+       id="path4996"
+       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       sodipodi:type="star" />
+  </g>
 </svg>

@@ -83,7 +83,7 @@ function drawBackground(app){
 
 function drawVertice(app, v){
 	var r = Math.min(app['canvas'].width, app['canvas'].height) / 40;
-	app['2d'].font = (r * 1.25) + 'px Georgia';
+	app['2d'].font = 'bolder ' + (r * 1.25) + 'px Georgia';
 	app['2d'].textBaseline = 'middle';
 	app['2d'].textAlign = 'center';
 	app['2d'].fillStyle = v.col;
@@ -156,6 +156,7 @@ function initEventListeners(app){
 	$(window).resize(function() { resize(app);});
 	toolEvents(app);
 	canvasEvents(app);
+	selectTool(app, $('#sel-btn > img'));
 }
 
 function toolEvents(app){
@@ -167,12 +168,14 @@ function toolEvents(app){
 		var oldSrc = $(this).attr('src');
 		var newSrc = oldSrc.substring(0, oldSrc.length - 5) + '0.svg';
 		$(this).attr('src', newSrc);
+		$(this).parent().children('.label').css('color', '#ffffff');
 	});
 	$('.tool > img').mouseleave(function(){
 		if($(this).parent().hasClass('active')) return;
 		var oldSrc = $(this).attr('src');
 		var newSrc = oldSrc.substring(0, oldSrc.length - 5) + '1.svg';
 		$(this).attr('src', newSrc);
+		$(this).parent().children('.label').css('color', '#5c5c5c');
 	});
 }
 
@@ -194,7 +197,7 @@ function canvasEvents(app){
 	    		}else{
 	    			var selectSecond = selectObject(app, x, y);
 	    			if(app['boundType'] === 'v'){
-	    				attemptNewEdge(app, selectSecond);
+	    				addNewEdgeIfPossible(app, selectSecond);
 	    			}else{
 	    				app['bound'] = selectSecond;
 	    			}
@@ -241,9 +244,11 @@ function selectTool(app, tool){
 		if($(this).parent().attr('id') === id){
 			newSrc += '0.svg';
 			if(!$(this).parent().hasClass('active')) $(this).parent().addClass('active');
+			$(this).parent().children('.label').css('color', '#ffffff');
 		}else{
 			newSrc += '1.svg';
 			if($(this).parent().hasClass('active')) $(this).parent().removeClass('active');
+			$(this).parent().children('.label').css('color', '#5c5c5c');
 		}
 		$(this).attr('src', newSrc);
 	});
@@ -273,6 +278,7 @@ function moveObject(app, x, y){
 function resize(app){
 	document.documentElement.style.overflow = 'hidden';
     document.body.scroll = "no"; 
+    $('.canvas-container').width($(window).width() - 128);
     var w = $('.canvas-container').width(); 
     var h = $('.canvas-container').height();
 	app['canvas'].width = w;
@@ -287,16 +293,6 @@ function resize(app){
 			v.y -= (v.y - h) + r + 10;
 		}
 	}
-	// Resize toolbar
-	$('.tool > img').width($('.panel').width() * 0.25);
-	$('.tool').width(($('.panel').width() - 24) / 3);
-	if($(window).width() < 400){
-		$('h1').css('font-size', 16);
-	}else if($(window).width() < 700){
-		$('h1').css('font-size', 22);
-	}else{
-		$('h1').css('font-size', 36);
-	} 
 	draw(app);
 }
 
@@ -332,7 +328,7 @@ function selectObject(app, x, y){
 	return null;
 }
 
-function attemptNewEdge(app, v2){
+function addNewEdgeIfPossible(app, v2){
 	var v1 = app['bound'];
 	if(v1 !== v2){
 		for(var i = 0; i < app['g'].e.length; i++){

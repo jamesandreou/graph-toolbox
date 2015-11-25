@@ -7,10 +7,34 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    width="64"
    height="64"
-   id="svg2985">
+   id="svg2985"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="addv_btn_0.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview3528"
+     showgrid="false"
+     inkscape:zoom="3.6875"
+     inkscape:cx="32"
+     inkscape:cy="32"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2985" />
   <defs
      id="defs2987" />
   <metadata
@@ -21,47 +45,35 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <path
+     d="m 25.791098,21.975171 c -8.643404,0.438133 -15.515129,7.606333 -15.515129,16.35862 0,9.034613 7.324008,16.35862 16.35862,16.35862 9.034621,0 16.35862,-7.324007 16.35862,-16.35862 0,-9.034612 -7.323999,-16.35862 -16.35862,-16.35862 -0.282333,0 -0.564675,-0.01415 -0.843491,0 z m -8.895,6.338966 3.476207,0 6.262284,16.793145 6.262285,-16.793145 3.476206,0 -7.514741,20.013749 -4.4475,0 -7.514741,-20.013749 z"
+     id="path3871"
+     style="fill:#ffffff;fill-opacity:1;stroke:none"
+     inkscape:connector-curvature="0" />
   <g
-     id="layer1">
-    <path
-       d="m 1133.7279,101.62746 a 398.33682,398.33682 0 1 1 -796.67367,0 398.33682,398.33682 0 1 1 796.67367,0 z"
-       transform="matrix(0.07481994,0,0,0.07481994,-23.021916,24.396241)"
-       id="path3808"
-       style="fill:none;stroke:#ffffff;stroke-width:58.71326065;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-    <g
-       transform="matrix(0.817931,0,0,0.817931,119.51301,-203.22573)"
-       id="g3894"
-       style="fill:#ffffff;fill-opacity:1">
-      <path
-         d="m -114.58413,275.32995 c -10.5674,0.53566 -18.96875,9.29948 -18.96875,20 0,11.04569 8.95431,20 20,20 11.0457,0 20,-8.95431 20,-20 0,-11.04569 -8.9543,-20 -20,-20 -0.34518,0 -0.69037,-0.0173 -1.03125,0 z m -10.875,7.75 4.25,0 7.65625,20.53125 7.65625,-20.53125 4.25,0 -9.1875,24.46875 -5.4375,0 -9.1875,-24.46875 z"
-         id="path3871"
-         style="fill:#ffffff;fill-opacity:1;stroke:none" />
-      <g
-         transform="matrix(0.51685393,0,0,0.51685393,10.782052,131.48084)"
-         id="g3886"
-         style="fill:#ffffff;fill-opacity:1">
-        <rect
-           width="10.017346"
-           height="52.443752"
-           ry="7.4919648"
-           x="-207.71262"
-           y="248.35213"
-           id="rect3882"
-           style="fill:#ffffff;fill-opacity:1;stroke:none" />
-        <rect
-           width="10.017346"
-           height="52.443752"
-           ry="7.4919648"
-           x="269.56534"
-           y="176.48207"
-           transform="matrix(0,1,-1,0,0,0)"
-           id="rect3884"
-           style="fill:#ffffff;fill-opacity:1;stroke:none" />
-      </g>
-    </g>
+     transform="matrix(0.42275085,0,0,0.42275085,128.33198,-95.683475)"
+     id="g3886"
+     style="fill:#ffffff;fill-opacity:1">
+    <rect
+       width="10.017346"
+       height="52.443752"
+       ry="7.4919648"
+       x="-207.71262"
+       y="248.35213"
+       id="rect3882"
+       style="fill:#ffffff;fill-opacity:1;stroke:none" />
+    <rect
+       width="10.017346"
+       height="52.443752"
+       ry="7.4919648"
+       x="269.56534"
+       y="176.48207"
+       transform="matrix(0,1,-1,0,0,0)"
+       id="rect3884"
+       style="fill:#ffffff;fill-opacity:1;stroke:none" />
   </g>
 </svg>

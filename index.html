@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>G2</title>
-	<link href='https://fonts.googleapis.com/css?family=Oswald:700|Permanent+Marker' rel='stylesheet' type='text/css'>
+	<title>Interactive Graph Theory</title>
 	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/style.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -12,17 +11,29 @@
 <body>
 	<div class="app-container">
 		<div class="panel">
-			<h1>Graph Theory</h1>
-			<h2>Tools</h2>
-			<div class="tools-container">
-				<div id="sel-btn" class="tool active"><img src="assets/sel_btn_0.svg" alt=""></div>
-				<div id="addv-btn" class="tool"><img src="assets/addv_btn_1.svg" alt=""></div>
-				<div id="adde-btn" class="tool"><img src="assets/adde_btn_1.svg" alt=""></div>
+			<img src="assets/k33.svg" alt="" height="80" width="80">
+			<div id="sel-btn" class="tool active">
+				<img src="assets/sel_btn_0.svg" alt="" height="40" width="40">
+				<div class="label">Selection</div></div>
+			<div id="addv-btn" class="tool">
+				<img src="assets/addv_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Add Vertice</div>
 			</div>
-			<div class="tools-container">
-				<div id="edgew-btn" class="tool"><img src="assets/edgew_btn_1.svg" alt=""></div>
-				<div id="edged-btn" class="tool"><img src="assets/edged_btn_1.svg" alt=""></div>
-				<div id="del-btn" class="tool"><img src="assets/del_btn_1.svg" alt=""></div>
+			<div id="adde-btn" class="tool">
+				<img src="assets/adde_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Add Edge</div>
+			</div>
+			<div id="edgew-btn" class="tool">
+				<img src="assets/edgew_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Add Weight</div>
+			</div>
+			<div id="edged-btn" class="tool">
+				<img src="assets/edged_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Direceted</div>
+			</div>
+			<div id="del-btn" class="tool">
+				<img src="assets/del_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Deletion</div>
 			</div>
 		</div>
 		<div class="canvas-container">
