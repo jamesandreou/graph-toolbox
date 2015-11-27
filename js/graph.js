@@ -126,28 +126,30 @@ function drawEdge(app, e){
 	// Draw directed edge
 	if(e.dir !== null){
 		var v1 = e.dir === e.v1 ? e.v1 : e.v2;
-		var v2 = e.dir === e.v1 ? e.v1 : e.v2;
-		// P = (1-t)^2 * v1 + 2(1-t)t * c + t^2 * v2 for t = 0.1, 10% of the curve
-		var px = 0.9 * 0.9 * v1.x + 2 * 0.1 * 0.9 * e.c1 + 0.1 * 0.1 * v2.x;
-		var py = 0.9 * 0.9 * v1.y + 2 * 0.1 * 0.9 * e.c2 + 0.1 * 0.1 * v2.y;
-		// Close approximation of angle of curve
-		var angle = Math.atan2(v1.y - py, v1.x - px);
-		// Coords of tip of triangle
-		var tipX = v1.x - r * Math.cos(angle);
-		var tipY = v1.y - r * Math.sin(angle);
-		// Midpoint between fat end of triangle
-		var midX = v1.x - 2 * r * Math.cos(angle);
-		var midY = v1.y - 2 * r * Math.sin(angle);
-		// Offset from midpoint, which will be other 2 triangle points
-		var ox = r / 2 * Math.sin(angle);
-		var oy = r / 2 * Math.cos(angle) * -1;
+		var v2 = e.dir === e.v1 ? e.v2 : e.v1;
+		var p1x = xOfCurve(v1.x, e.c1, v2.x, 0.25);
+		var p1y = yOfCurve(v1.y, e.c2, v2.y, 0.25);
+		var p2x = xOfCurve(v1.x, e.c1, v2.x, 0.3);
+		var p2y = yOfCurve(v1.y, e.c2, v2.y, 0.3);
+		var d = Math.sqrt((p2x-p1x) * (p2x-p1x) + (p2y-p1y) * (p2y-p1y));
+		var pct = r / d;
+		var endX = p1x + pct * (p2x - p1x);
+		var endY = p1y + pct * (p2y - p1y);
+		var angle = Math.atan2(endY - p1y, endX - p1x);
 		app['2d'].beginPath();
-		app['2d'].moveTo(midX + ox, midY + oy);
-		app['2d'].lineTo(midX - ox, midY - oy);
-		app['2d'].lineTo(tipX, tipY);
-		app['2d'].lineTo(midX + ox, midY + oy);
-		app['2d'].fill();
+		app['2d'].moveTo(endX + r / 2 * Math.cos(angle+Math.PI/2), endY + r / 2 * Math.sin(angle+Math.PI/2));
+		app['2d'].lineTo(p1x, p1y);
+		app['2d'].lineTo(endX + r / 2 * Math.cos(angle-Math.PI/2), endY + r / 2 * Math.sin(angle-Math.PI/2));
+		app['2d'].stroke();
 	}
+}
+
+function xOfCurve(x1, cx, x2, t){
+	return (1-t) * (1-t) * x1 + 2 * (1-t) * t * cx + t * t * x2;
+}
+
+function yOfCurve(y1, cy, y2, t){
+	return (1-t) * (1-t) * y1 + 2 * (1-t) * t * cy + t * t * y2;
 }
 
 /* Event Listeners */
@@ -202,6 +204,25 @@ function canvasEvents(app){
 	    				app['bound'] = selectSecond;
 	    			}
 	    		}
+	    		break;
+	    	case 5:
+	    		if(app['boundType'] === 'e'){
+	    			var selectDirection = selectObject(app, x, y);
+	    			if(app['boundType'] === 'v' && 
+	    				(app['bound'].v1 === selectDirection || app['bound'].v2 === selectDirection)){
+	    				app['bound'].dir = selectDirection;
+	    			app['bound'] = null;
+	    			app['boundType'] = null;
+	    			}else{
+	    				app['bound'] = selectDirection;
+	    			}
+	    		}else{
+	    			app['bound'] = selectObject(app, x, y);
+	    		}
+	    		break;
+	    	case 6:
+	    		var toDelete = selectObject(app, x, y);
+	    		deleteObject(app, toDelete);
 	    		break;
 	    }
 	    draw(app);
@@ -273,6 +294,32 @@ function moveObject(app, x, y){
  	draw(app);
 }
 
+function deleteObject(app, toDelete){
+	// Delete all edges that are incident to vertice
+	// Delete vertice
+	// or Delete edge
+	if(app['boundType'] === 'v'){
+		for(var i = 0; i < app['g'].e.length; i++){
+			if(app['g'].e[i].v1 === toDelete || app['g'].e[i].v2 === toDelete){
+				app['g'].e.splice(i, 1);
+			}
+		}
+		for(var i = 0; i < app['g'].v.length; i++){
+			if(app['g'].v[i] === toDelete){
+				app['g'].v.splice(i, 1);
+				break;
+			}
+		}
+	}else if(app['boundType'] === 'e'){
+		for(var i = 0; i < app['g'].e.length; i++){
+			if(app['g'].e[i] === toDelete){
+				app['g'].e.splice(i, 1);
+				break;
+			}
+		}
+	}
+}
+
 /* Helper functions for UI */
 
 function resize(app){
@@ -322,6 +369,8 @@ function setSlider(app){
 }
 
 function selectObject(app, x, y){
+	// Returns object that is found at x,y
+	// Sets app['boundType'] to type of object found
 	var r = Math.min(app['canvas'].width, app['canvas'].height) / 40;
 	for(var i = 0; i < app['g'].v.length; i++){
 		var v = app['g'].v[i];
@@ -399,9 +448,9 @@ function defaultGraph(app){
 	addE(app, 2, 4, app['g'].v[4], 0);
 	app['g'].e[1].curveX = -50;
 	app['g'].e[1].curveY = -180;
-	addE(app, 0, 4, null, null);
-	app['g'].e[2].curveX = 80;
-	app['g'].e[2].curveY = 40;
+	addE(app, 0, 4, app['g'].v[4], null);
+	app['g'].e[0].curveX = 60;
+	app['g'].e[0].curveY = 40;
 	addE(app, 0, 2, app['g'].v[0], 3);
 	addE(app, 1, 3, app['g'].v[3], 14);
 	addE(app, 2, 3, app['g'].v[2], 9);
