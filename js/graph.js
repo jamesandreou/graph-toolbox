@@ -254,13 +254,16 @@ function canvasEvents(app){
  	});
  	$('.weight-input').bind('input propertychange', function() {
  		var text = $('.weight-input').val();
- 		if(text.length < 1) return
- 		for(var i = 0; i < text.length; i++){
- 			if(!(text.charAt(i) >= '0' && text.charAt(i) <= '9')){
- 				return;
- 			}
+ 		if(text.length === 0){
+ 			app['bound'].weight = null;
+ 		}else{
+	 		for(var i = 0; i < text.length; i++){
+	 			if(!(text.charAt(i) >= '0' && text.charAt(i) <= '9')){
+	 				return;
+	 			}
+	 		}
+	 		app['bound'].weight = parseInt(text);
  		}
- 		app['bound'].weight = parseInt(text);
  		draw(app);
 	});
 }
@@ -321,12 +324,16 @@ function moveObject(app, x, y){
 function deleteObject(app, toDelete){
 	// Delete all edges that are incident to vertice
 	// Delete vertice
-	// or Delete edge
+	// or if an edge just delete edge
 	if(app['boundType'] === 'v'){
+		var badEdges = [];
 		for(var i = 0; i < app['g'].e.length; i++){
 			if(app['g'].e[i].v1 === toDelete || app['g'].e[i].v2 === toDelete){
-				app['g'].e.splice(i, 1);
+				badEdges.push(i);
 			}
+		}
+		while(badEdges.length > 0){
+			app['g'].e.splice(badEdges.pop(), 1);
 		}
 		for(var i = 0; i < app['g'].v.length; i++){
 			if(app['g'].v[i] === toDelete){
@@ -472,16 +479,16 @@ function defaultGraph(app){
 	addE(app, 0, 1, app['g'].v[0], 5);
 	app['g'].e[0].curveX = -50;
 	app['g'].e[0].curveY = -180;
-	addE(app, 2, 4, app['g'].v[4], 0);
-	app['g'].e[1].curveX = -50;
-	app['g'].e[1].curveY = -180;
-	addE(app, 0, 4, app['g'].v[4], null);
+	addE(app, 2, 4, app['g'].v[4], 1);
+	app['g'].e[1].curveX = -80;
+	app['g'].e[1].curveY = 180;
+	addE(app, 0, 4, app['g'].v[4], 32);
 	app['g'].e[2].curveX = 60;
 	app['g'].e[2].curveY = 40;
 	addE(app, 0, 2, app['g'].v[0], 3);
 	addE(app, 1, 3, app['g'].v[3], 14);
 	addE(app, 2, 3, app['g'].v[2], 9);
-	addE(app, 3, 4, null, null);
+	addE(app, 3, 4, app['g'].v[3], 85);
 	for(var i = 0; i < app['g'].e.length; i++){
 		app['g'].e[i].cacheControlPoint();
 	}
