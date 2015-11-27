@@ -28,14 +28,19 @@
 	color: #5c5c5c;
 	width: 100%;
 	text-align: center;
-	padding-bottom: 12px;
+	padding-bottom: 8px;
 }
 
-.tool > img:hover{
+.tool:hover{
 	cursor: pointer;
 }
 
 .label{
 	font-size: 12px;
 	color: #5c5c5c;
+}
+
+.slider{
+	position: absolute;
+	background: #ffffff;
 }

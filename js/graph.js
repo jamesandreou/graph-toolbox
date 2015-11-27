@@ -160,22 +160,22 @@ function initEventListeners(app){
 }
 
 function toolEvents(app){
-	$('.tool > img').click(function(){
-		selectTool(app, this);
+	$('.tool').click(function(){
+		selectTool(app, $(this).attr('id'));
 	});
-	$('.tool > img').mouseenter(function(){
-		if($(this).parent().hasClass('active')) return;
-		var oldSrc = $(this).attr('src');
+	$('.tool').mouseenter(function(){
+		if($(this).hasClass('active')) return;
+		var oldSrc = $(this).children('img').attr('src');
 		var newSrc = oldSrc.substring(0, oldSrc.length - 5) + '0.svg';
-		$(this).attr('src', newSrc);
-		$(this).parent().children('.label').css('color', '#ffffff');
+		$(this).children('img').attr('src', newSrc);
+		$(this).children('.label').css('color', '#ffffff');
 	});
-	$('.tool > img').mouseleave(function(){
-		if($(this).parent().hasClass('active')) return;
-		var oldSrc = $(this).attr('src');
+	$('.tool').mouseleave(function(){
+		if($(this).hasClass('active')) return;
+		var oldSrc = $(this).children('img').attr('src');
 		var newSrc = oldSrc.substring(0, oldSrc.length - 5) + '1.svg';
-		$(this).attr('src', newSrc);
-		$(this).parent().children('.label').css('color', '#5c5c5c');
+		$(this).children('img').attr('src', newSrc);
+		$(this).children('.label').css('color', '#5c5c5c');
 	});
 }
 
@@ -223,8 +223,7 @@ function canvasEvents(app){
  	});
 }
 
-function selectTool(app, tool){
-	var id = $(tool).parent().attr('id');
+function selectTool(app, id){
 	if(id === 'sel-btn'){
 		app['tool'] = 1;
 	}else if(id === 'addv-btn'){
@@ -238,20 +237,21 @@ function selectTool(app, tool){
 	}else if(id === 'del-btn'){
 		app['tool'] = 6;
 	}
-	$('.tool > img').each(function (){
-		var oldSrc = $(this).attr('src');
+	$('.tool').each(function (){
+		var oldSrc = $(this).children('img').attr('src');
 		var newSrc = oldSrc.substring(0, oldSrc.length - 5);
-		if($(this).parent().attr('id') === id){
+		if($(this).attr('id') === id){
 			newSrc += '0.svg';
-			if(!$(this).parent().hasClass('active')) $(this).parent().addClass('active');
-			$(this).parent().children('.label').css('color', '#ffffff');
+			if(!$(this).hasClass('active')) $(this).addClass('active');
+			$(this).children('.label').css('color', '#ffffff');
 		}else{
 			newSrc += '1.svg';
-			if($(this).parent().hasClass('active')) $(this).parent().removeClass('active');
-			$(this).parent().children('.label').css('color', '#5c5c5c');
+			if($(this).hasClass('active')) $(this).removeClass('active');
+			$(this).children('.label').css('color', '#5c5c5c');
 		}
-		$(this).attr('src', newSrc);
+		$(this).children('img').attr('src', newSrc);
 	});
+	setSlider(app);
 }
 
 function moveObject(app, x, y){
@@ -293,7 +293,32 @@ function resize(app){
 			v.y -= (v.y - h) + r + 10;
 		}
 	}
+	// Recalculate control points
+	for(var i = 0; i < app['g'].e.length; i++){
+		app['g'].e[i].cacheControlPoint();
+	}
+	// Toolbar
+	var size = Math.floor($('.panel').height() * 0.1);
+	if($(window).height() < 500){
+		$('.label').css('font-size', '8px');
+		$('.panel').width(80);
+	}else{
+		$('.label').css('font-size', '12px');
+		$('.panel').width(128);
+	}
+	$('.tool').css('height', size);
+	$('.tool > img').css('width', size - $('.label').height() - 8);
+	$('.tool > img').css('height', size - $('.label').height() - 8);
+	$('.banner').css('width', size);
+	$('.banner').css('height', size);
+	$('.slider').css('top', $())
+	$('.slider').height($('.tool').height());
+	setSlider(app);
 	draw(app);
+}
+
+function setSlider(app){
+	$('.slider').css('top', $('.tool').first().offset().top + $('.tool').outerHeight() * (app['tool']-1));
 }
 
 function selectObject(app, x, y){
@@ -347,6 +372,11 @@ function addNewEdgeIfPossible(app, v2){
 	return true;
 }
 
+function initUI(app){
+	$('.slider').width(4);
+	selectTool(app, 'sel-btn');
+}
+
 /* Preloaded graphs */
 
 function addV(app, x, y, col){
@@ -391,6 +421,7 @@ $(window).ready(function(){
 				'boundType' : null
 			};
 	initEventListeners(app);
+	initUI(app);
 	defaultGraph(app);
 	resize(app);
 });
