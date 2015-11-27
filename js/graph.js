@@ -113,8 +113,8 @@ function drawEdge(app, e){
 		app['2d'].textBaseline = 'middle';
 		app['2d'].textAlign = 'center';
 		app['2d'].beginPath();
-		var w = app['2d'].measureText(e.weight.toString()).width + app['2d'].lineWidth;
-		var h = r * 1.25;
+		var w = app['2d'].measureText(e.weight.toString()).width + app['2d'].lineWidth + 4;
+		var h = r * 1.25 + 3;
 		app['2d'].rect(e.wx-w/2, e.wy - h / 2, w, h);
 		app['2d'].fillStyle = '#ffffff';
 		app['2d'].fill();
@@ -137,9 +137,9 @@ function drawEdge(app, e){
 		var endY = p1y + pct * (p2y - p1y);
 		var angle = Math.atan2(endY - p1y, endX - p1x);
 		app['2d'].beginPath();
-		app['2d'].moveTo(endX + r / 2 * Math.cos(angle+Math.PI/2), endY + r / 2 * Math.sin(angle+Math.PI/2));
+		app['2d'].moveTo(endX + r / 3 * Math.cos(angle+Math.PI/2), endY + r / 3 * Math.sin(angle+Math.PI/2));
 		app['2d'].lineTo(p1x, p1y);
-		app['2d'].lineTo(endX + r / 2 * Math.cos(angle-Math.PI/2), endY + r / 2 * Math.sin(angle-Math.PI/2));
+		app['2d'].lineTo(endX + r / 3 * Math.cos(angle-Math.PI/2), endY + r / 3 * Math.sin(angle-Math.PI/2));
 		app['2d'].stroke();
 	}
 }
@@ -205,6 +205,16 @@ function canvasEvents(app){
 	    			}
 	    		}
 	    		break;
+	    	case 4:
+	    		app['bound'] = selectObject(app, x, y);
+	    		if(app['boundType'] === 'e'){
+	    			$('.weight-input').show();
+	    			$('.weight-input').focus();
+	    			$('.weight-input').val(app['bound'].weight);
+	    		}else{
+	    			$('.weight-input').hide();
+	    		}
+	    		break;
 	    	case 5:
 	    		if(app['boundType'] === 'e'){
 	    			var selectDirection = selectObject(app, x, y);
@@ -242,6 +252,17 @@ function canvasEvents(app){
 	    var y = Math.floor(e.pageY-$("#canvas").offset().top);
  		moveObject(app, x, y);
  	});
+ 	$('.weight-input').bind('input propertychange', function() {
+ 		var text = $('.weight-input').val();
+ 		if(text.length < 1) return
+ 		for(var i = 0; i < text.length; i++){
+ 			if(!(text.charAt(i) >= '0' && text.charAt(i) <= '9')){
+ 				return;
+ 			}
+ 		}
+ 		app['bound'].weight = parseInt(text);
+ 		draw(app);
+	});
 }
 
 function selectTool(app, id){
@@ -273,6 +294,9 @@ function selectTool(app, id){
 		$(this).children('img').attr('src', newSrc);
 	});
 	setSlider(app);
+	$('.weight-input').hide();
+	app['bound'] = selectObject(app, -1, -1);
+	draw(app);
 }
 
 function moveObject(app, x, y){
@@ -325,7 +349,27 @@ function deleteObject(app, toDelete){
 function resize(app){
 	document.documentElement.style.overflow = 'hidden';
     document.body.scroll = "no"; 
-    $('.canvas-container').width($(window).width() - 128);
+    // Toolbar
+	var size = Math.floor($('.panel').height() * 0.1);
+	if($(window).height() < 500){
+		$('.label').css('font-size', '8px');
+		$('.panel').width(80);
+	}else{
+		$('.label').css('font-size', '12px');
+		$('.panel').width(128);
+	}
+	$('.tool').css('height', size);
+	$('.tool > img').css('width', size - $('.label').height() - 8);
+	$('.tool > img').css('height', size - $('.label').height() - 8);
+	$('.banner').css('width', size);
+	$('.banner').css('height', size);
+	$('.slider').css('top', $())
+	$('.slider').height($('.tool').height());
+	$('.slider').width(Math.floor($('.panel').width() / 32));
+	setSlider(app);
+	$('.weight-input').css('left', $(window).width() - $('.weight-input').outerWidth() - 12);
+	// canvas size
+    $('.canvas-container').width($(window).width() - $('.panel').width());
     var w = $('.canvas-container').width(); 
     var h = $('.canvas-container').height();
 	app['canvas'].width = w;
@@ -344,23 +388,6 @@ function resize(app){
 	for(var i = 0; i < app['g'].e.length; i++){
 		app['g'].e[i].cacheControlPoint();
 	}
-	// Toolbar
-	var size = Math.floor($('.panel').height() * 0.1);
-	if($(window).height() < 500){
-		$('.label').css('font-size', '8px');
-		$('.panel').width(80);
-	}else{
-		$('.label').css('font-size', '12px');
-		$('.panel').width(128);
-	}
-	$('.tool').css('height', size);
-	$('.tool > img').css('width', size - $('.label').height() - 8);
-	$('.tool > img').css('height', size - $('.label').height() - 8);
-	$('.banner').css('width', size);
-	$('.banner').css('height', size);
-	$('.slider').css('top', $())
-	$('.slider').height($('.tool').height());
-	setSlider(app);
 	draw(app);
 }
 
@@ -422,7 +449,7 @@ function addNewEdgeIfPossible(app, v2){
 }
 
 function initUI(app){
-	$('.slider').width(4);
+	$('.weight-input').hide();
 	selectTool(app, 'sel-btn');
 }
 
@@ -449,8 +476,8 @@ function defaultGraph(app){
 	app['g'].e[1].curveX = -50;
 	app['g'].e[1].curveY = -180;
 	addE(app, 0, 4, app['g'].v[4], null);
-	app['g'].e[0].curveX = 60;
-	app['g'].e[0].curveY = 40;
+	app['g'].e[2].curveX = 60;
+	app['g'].e[2].curveY = 40;
 	addE(app, 0, 2, app['g'].v[0], 3);
 	addE(app, 1, 3, app['g'].v[3], 14);
 	addE(app, 2, 3, app['g'].v[2], 9);

@@ -44,3 +44,10 @@
 	position: absolute;
 	background: #ffffff;
 }
+
+.weight-input{
+	resize: none;
+	position: absolute;
+	top: 12px;
+	width: 100px;
+}
