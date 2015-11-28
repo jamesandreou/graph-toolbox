@@ -1,5 +1,5 @@
 *{
-	font-family: "Courier New", Courier, monospace;
+	font-family: 'Roboto Slab', serif;
 }
 
 .app-container{
@@ -28,7 +28,7 @@
 	color: #5c5c5c;
 	width: 100%;
 	text-align: center;
-	padding-bottom: 8px;
+	padding-bottom: 12px;
 }
 
 .tool:hover{

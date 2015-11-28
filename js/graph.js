@@ -13,7 +13,7 @@ function Vertice(label, x, y, col) {
     this.col = col;
 }
 
-function Edge(v1, v2, dir, weight){
+function Edge(v1, v2, dir, weight, curveX, curveY){
 	this.v1 = v1;
 	this.v2 = v2;
 	if(dir !== null && (dir === v1 || dir === v2)){
@@ -26,8 +26,8 @@ function Edge(v1, v2, dir, weight){
 	}else{
 		this.weight = null;
 	}
-	this.curveX = 0;
-	this.curveY = 0;
+	this.curveX = curveX;
+	this.curveY = curveY;
 	this.cx = 0;
 	this.cy = 0;
 	this.wx = 0;
@@ -366,8 +366,8 @@ function resize(app){
 		$('.panel').width(128);
 	}
 	$('.tool').css('height', size);
-	$('.tool > img').css('width', size - $('.label').height() - 8);
-	$('.tool > img').css('height', size - $('.label').height() - 8);
+	$('.tool > img').css('width', size - $('.label').height() - 12);
+	$('.tool > img').css('height', size - $('.label').height() - 12);
 	$('.banner').css('width', size);
 	$('.banner').css('height', size);
 	$('.slider').css('top', $())
@@ -379,17 +379,18 @@ function resize(app){
     $('.canvas-container').width($(window).width() - $('.panel').width());
     var w = $('.canvas-container').width(); 
     var h = $('.canvas-container').height();
+    var oldW = app['canvas'].width;
+    var oldH = app['canvas'].height;
 	app['canvas'].width = w;
 	app['canvas'].height = h;
 	var r = Math.min(app['canvas'].width, app['canvas'].height) / 40;
-	// If vertices are outside the canvas after resize shift back in
+	// Recalculate positions of vertices based on new size
+	var factorX = w / oldW;
+	var factorY = h / oldH;
 	for(var i = 0; i < app['g'].v.length; i++){
 		var v  = app['g'].v[i];
-		if(v.x > w - r - 2){
-			v.x -= (v.x - w) + r + 10;
-		}else if(v.y > h - r - 2){
-			v.y -= (v.y - h) + r + 10;
-		}
+		v.x = v.x * factorX;
+		v.y = v.y * factorY;
 	}
 	// Recalculate control points
 	for(var i = 0; i < app['g'].e.length; i++){
@@ -418,7 +419,7 @@ function selectObject(app, x, y){
 	}
 	for(var i = 0; i < app['g'].e.length; i++){
 		var e = app['g'].e[i];
-		// Create path surrounding the curves bezier curve with two more bezier curves shifted
+		// Create path surrounding the edge's bezier curve with two more bezier curves shifted
 		app['2d'].beginPath();
 		app['2d'].moveTo(e.v1.x - 8, e.v1.y - 8);
 		app['2d'].quadraticCurveTo(e.c1 + 8, e.c2 - 8, e.v2.x + 8, e.v2.y - 8);
@@ -431,6 +432,19 @@ function selectObject(app, x, y){
 			return e;
 		}
 		app['2d'].closePath();
+		// If weighted add hitbox of weight
+		if(e.weight !== null){
+			app['2d'].beginPath();
+			app['2d'].font = 'bolder ' + (r / 1.5 * 1.25) + 'px Georgia';
+			var w = app['2d'].measureText(e.weight.toString()).width + app['2d'].lineWidth + 4;
+			var h = r * 1.25 + 3;
+			app['2d'].rect(e.wx-w/2, e.wy - h / 2, w, h);
+			if(app['2d'].isPointInPath(x, y)){
+				app['2d'].closePath();
+				app['boundType'] = 'e';
+				return e;
+			}
+		}
 	}
 	app['boundType'] = null;
 	return null;
@@ -448,7 +462,7 @@ function addNewEdgeIfPossible(app, v2){
 	}else{
 		return false;
 	}
-	var newEdge = new Edge(v1, v2, null, null);
+	var newEdge = new Edge(v1, v2, null, null, 0, 0);
 	app['g'].e.push(newEdge);
 	newEdge.cacheControlPoint();
 	draw(app);
@@ -463,32 +477,59 @@ function initUI(app){
 /* Preloaded graphs */
 
 function addV(app, x, y, col){
+	x = app['canvas'].width * x / 100;
+	y = app['canvas'].height * y / 100;
 	app['g'].v.push(new Vertice((app['g'].v.length + 1).toString(), x, y, app['colors'][col]));
 }
 
-function addE(app, v1, v2, dir, weight){
-	app['g'].e.push(new Edge(app['g'].v[v1], app['g'].v[v2], dir, weight));
+function addE(app, v1, v2, dir, weight, cx, cy){
+	app['g'].e.push(new Edge(app['g'].v[v1], app['g'].v[v2], app['g'].v[dir], weight, cx, cy));
+}
+
+function bidiakisCube(app){
+	addV(app, 10, 10, 1);
+	addV(app, 15, 20, 1);
+	addV(app, 20, 30, 1);
+	addV(app, 40, 10, 1);
+	addV(app, 45, 20, 1);
+	addV(app, 50, 30, 1);
+	addV(app, 10, 50, 1);
+	addV(app, 25, 50, 1);
+	addV(app, 40, 50, 1);
+	addV(app, 20, 70, 1);
+	addV(app, 35, 70, 1);
+	addV(app, 50, 70, 1);
+	addE(app, 0, 1, null, null, 0, 0);
+	addE(app, 1, 2, null, null, 0, 0);
+	addE(app, 3, 4, null, null, 0, 0);
+	addE(app, 4, 5, null, null, 0, 0);
+	addE(app, 0, 3, null, null, 0, 0);
+	addE(app, 1, 4, null, null, 0, 0);
+	addE(app, 2, 5, null, null, 0, 0);
+	addE(app, 6, 7, null, null, 0, 0);
+	addE(app, 7, 8, null, null, 0, 0);
+	addE(app, 9, 10, null, null, 0, 0);
+	addE(app, 10, 11, null, null, 0, 0);
+	addE(app, 6, 9, null, null, 0, 0);
+	addE(app, 7, 10, null, null, 0, 0);
+	addE(app, 8, 11, null, null, 0, 0);
+	addE(app, 0, 6, null, null, 0, 0);
+	addE(app, 2, 9, null, null, 0, 0);
+	addE(app, 3, 8, null, null, 0, 0);
+	addE(app, 5, 11, null, null, 0, 0);
 }
 
 function defaultGraph(app){
-	addV(app, 300, 200, 0);
-	addV(app, 700, 550, 1);
-	addV(app, 500, 600, 2);
-	addV(app, 600, 50, 3);
-	addV(app, 900, 200, 3);
-	addE(app, 0, 1, app['g'].v[0], 5);
-	app['g'].e[0].curveX = -50;
-	app['g'].e[0].curveY = -180;
-	addE(app, 2, 4, app['g'].v[4], 1);
-	app['g'].e[1].curveX = -80;
-	app['g'].e[1].curveY = 180;
-	addE(app, 0, 4, app['g'].v[4], 32);
-	app['g'].e[2].curveX = 60;
-	app['g'].e[2].curveY = 40;
-	addE(app, 0, 2, app['g'].v[0], 3);
-	addE(app, 1, 3, app['g'].v[3], 14);
-	addE(app, 2, 3, app['g'].v[2], 9);
-	addE(app, 3, 4, app['g'].v[3], 85);
+	bidiakisCube(app);
+	addV(app, 60, 10, 0);
+	addV(app, 80, 60, 1);
+	addV(app, 65, 68, 3);
+	addV(app, 90, 40, 2);
+	addE(app, 12, 13, 13, 47, -50, 60);
+	addE(app, 13, 14, 13, 9, 20, 45);
+	addE(app, 14, 15, 14, 16, 0, -160);
+	addE(app, 13, 15, 15, 22, 0, 0);
+	addE(app, 12, 15, 12, 103, 0, -100);
 	for(var i = 0; i < app['g'].e.length; i++){
 		app['g'].e[i].cacheControlPoint();
 	}
@@ -505,6 +546,7 @@ $(window).ready(function(){
 			};
 	initEventListeners(app);
 	initUI(app);
-	defaultGraph(app);
 	resize(app);
+	defaultGraph(app);
+	draw(app);
 });
