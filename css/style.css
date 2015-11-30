@@ -50,4 +50,5 @@
 	position: absolute;
 	top: 12px;
 	width: 100px;
+	overflow: auto;
 }
