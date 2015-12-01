@@ -179,9 +179,9 @@ function toolEvents(app){
 		$(this).children('img').attr('src', newSrc);
 		$(this).children('.label').css('color', '#5c5c5c');
 	});
-	$('#planar').click(function(){
+	$('#planar').click(throttle(function(){
 		planarTest(app);
-	});
+	}, 5000));
 }
 
 function canvasEvents(app){
@@ -344,6 +344,9 @@ function deleteObject(app, toDelete){
 				break;
 			}
 		}
+		for(var i = 0; i < app['g'].v.length; i++){
+			app['g'].v[i].label = i.toString();
+		}
 	}else if(app['boundType'] === 'e'){
 		for(var i = 0; i < app['g'].e.length; i++){
 			if(app['g'].e[i] === toDelete){
@@ -360,23 +363,30 @@ function resize(app){
 	document.documentElement.style.overflow = 'hidden';
     document.body.scroll = "no"; 
     // Toolbar
-    var bannerSize = Math.floor($('.panel').height() * 0.15)
+    var bannerSize = Math.floor($('.panel').height() * 0.15);
 	var componentSize = Math.floor($('.panel').height() * 0.1);
 	var topMargin = Math.floor($('.panel').height() * 0.03);
 	$('.panel').width(bannerSize + 8);
 	$('.tool').css('height', componentSize);
 	$('.tool').css('padding-top', topMargin);
-	$('.tool > img').css('width', componentSize - $('.label').height());
-	$('.tool > img').css('height', componentSize - $('.label').height());
+	$('.tool > img').css('width', componentSize - $('.tool > .label').height());
+	$('.tool > img').css('height', componentSize - $('.tool > .label').height());
 	$('.banner').css('width', bannerSize*0.8);
 	$('.banner').css('height', bannerSize*0.8);
 	$('.banner').css('padding-top', bannerSize*0.1)
 	$('.slider').height($('.tool').height());
 	$('.slider').width(Math.floor($('.panel').width() / 32));
 	setSlider(app);
-	$('.weight-input').css('left', $(window).width() - $('.weight-input').outerWidth() - 12);
+	$('.weight-input').css('left', $(window).width() - $('.weight-input').outerWidth() 
+		- $('.controls').outerWidth() - 12);
 	// Controls
-	
+	var imgSize = Math.floor($('.controls').height() * 0.15);
+	$('.controls').width(imgSize + 16);
+	$('.algorithm').css('height', imgSize);
+	$('.algorithm').css('padding-top', $('.controls').height() * 0.02);
+	$('.algorithm').css('padding-bottom', $('.controls').height() * 0.02);
+	$('.algorithm > img').css('width', imgSize - $('.algorithm > .label').height());
+	$('.algorithm > img').css('height', imgSize - $('.algorithm > .label').height());
 	// canvas size
     $('.canvas-container').width($(window).width() - $('.panel').width() - $('.controls').width());
     var w = $('.canvas-container').width(); 
@@ -471,6 +481,17 @@ function addNewEdgeIfPossible(app, v2){
 	newEdge.cacheControlPoint();
 	draw(app);
 	return true;
+}
+
+function throttle(callback, delay) {
+    var previousCall = new Date().getTime() - delay;
+    return function() {
+        var time = new Date().getTime();
+        if ((time - previousCall) >= delay) {
+            previousCall = time;
+            callback.apply(null, arguments);
+        }
+    };
 }
 
 function initUI(app){
@@ -650,5 +671,18 @@ function animate(app, newPositions){
 }
 
 function isolateKurotowski(app, res){
-	console.log("Not Planar");
+    for(var i = 0; i < res.length - 1; i++){
+        res[i] = res[i].slice(1, res[i].length - 1);
+        var vertices = res[i].split(",");
+        console.log(vertices);
+        for(var j = 0; i < app['g'].e.length; j++){
+            if((app['g'].e[j].v1.label === vertices[0] && app['g'].e[j].v2.label === vertices[1])
+                || (app['g'].e[j].v1.label === vertices[0] && app['g'].e[j].v2.label === vertices[1])){
+                app['g'].e[j].col = app['colors'][2];
+                app['g'].e[j].v1.col = app['colors'][2];
+                app['g'].e[j].v2.col = app['colors'][2];
+                break;
+            }
+        }
+    }
 }
