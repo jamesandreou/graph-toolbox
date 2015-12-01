@@ -194,7 +194,7 @@ function canvasEvents(app){
 	    		app['bound'] = selectObject(app, x, y);
 	    		break;
 	    	case 2:
-	    		addV(app, x, y , 0);
+	    		app['g'].v.push(new Vertice((app['g'].v.length).toString(), x, y, app['colors'][0]));
 	    		break;
 	    	case 3:
 	    		if(app['boundType'] !== 'v'){
@@ -499,90 +499,10 @@ function initUI(app){
 	selectTool(app, 'sel-btn');
 }
 
-/* Preloaded graphs */
-
-function addV(app, x, y, col){
-	x = app['canvas'].width * x / 100;
-	y = app['canvas'].height * y / 100;
-	app['g'].v.push(new Vertice((app['g'].v.length).toString(), x, y, app['colors'][col]));
-}
-
-function addE(app, v1, v2, dir, weight, cx, cy){
-	app['g'].e.push(new Edge(app['g'].v[v1], app['g'].v[v2], app['g'].v[dir], weight, cx, cy));
-}
-
-function bidiakisCube(app){
-	addV(app, 10, 10, 1);
-	addV(app, 15, 20, 1);
-	addV(app, 20, 30, 1);
-	addV(app, 40, 10, 1);
-	addV(app, 45, 20, 1);
-	addV(app, 50, 30, 1);
-	addV(app, 10, 50, 1);
-	addV(app, 25, 50, 1);
-	addV(app, 40, 50, 1);
-	addV(app, 20, 70, 1);
-	addV(app, 35, 70, 1);
-	addV(app, 50, 70, 1);
-	addE(app, 0, 1, null, null, 0, 0);
-	addE(app, 1, 2, null, null, 0, 0);
-	addE(app, 3, 4, null, null, 0, 0);
-	addE(app, 4, 5, null, null, 0, 0);
-	addE(app, 0, 3, null, null, 0, 0);
-	addE(app, 1, 4, null, null, 0, 0);
-	addE(app, 2, 5, null, null, 0, 0);
-	addE(app, 6, 7, null, null, 0, 0);
-	addE(app, 7, 8, null, null, 0, 0);
-	addE(app, 9, 10, null, null, 0, 0);
-	addE(app, 10, 11, null, null, 0, 0);
-	addE(app, 6, 9, null, null, 0, 0);
-	addE(app, 7, 10, null, null, 0, 0);
-	addE(app, 8, 11, null, null, 0, 0);
-	addE(app, 0, 6, null, null, 0, 0);
-	addE(app, 2, 9, null, null, 0, 0);
-	addE(app, 3, 8, null, null, 0, 0);
-	addE(app, 5, 11, null, null, 0, 0);
-}
-
-function defaultGraph(app){
-	bidiakisCube(app);
-	/*
-	addV(app, 60, 10, 0);
-	addV(app, 80, 60, 1);
-	addV(app, 65, 68, 3);
-	addV(app, 90, 40, 2);
-	addE(app, 12, 13, 13, 47, -50, 60);
-	addE(app, 13, 14, 13, 9, 20, 45);
-	addE(app, 14, 15, 14, 16, 0, -160);
-	addE(app, 13, 15, 15, 22, 0, 0);
-	addE(app, 12, 15, 12, 103, 0, -100);
-	*/
-	for(var i = 0; i < app['g'].e.length; i++){
-		app['g'].e[i].cacheControlPoint();
-	}
-}
-
-$(window).ready(function(){
-	var app = {'canvas' : document.getElementById('canvas'), 
-				'2d' : canvas.getContext('2d'),
-				'g' : {v : [], e : []},
-				'colors' : ['#32cd32', '#ff0000', '#7ec0ee', '#ffff00'], // 1 - green, 2 - red, 3 - blue, 4 - yellow
-				'tool' : 1, // 1 - Select, 2 - Add Vertice, 3 - Add Edge, 4 - Edge Weight, 5 - Edge Dir, 6 - Delete
-				'bound' : null,
-				'boundType' : null
-			};
-	initEventListeners(app);
-	initUI(app);
-	resize(app);
-	defaultGraph(app);
-	draw(app);
-});
-
-
 /* ALGORITHMS */
 
 function planarTest(app){
-	console.log("Executing Planarity Test..");
+	genCode(app);
 	// Convert graph to a single string
 	var stringifyGraph = app['g'].v.length.toString() + "-";
 	for(var i = 0; i < app['g'].e.length; i++){
@@ -686,3 +606,136 @@ function isolateKurotowski(app, res){
         }
     }
 }
+
+// Generates code for a graph while running, below are some examples generated from this method
+function genCode(app){
+	console.log("GENERATED CODE:");
+	for(var i = 0; i < app['g'].v.length; i++){
+		var v = app['g'].v[i];
+		var x = v.x / app['canvas'].width * 100;
+		var y = v.y / app['canvas'].height * 100;
+		console.log("addV(app, " + Math.round(x) + ", " + Math.round(y) + ", 0);");
+	}
+	for(var i = 0; i < app['g'].e.length; i++){
+		var e = app['g'].e[i];
+		var w = (e.weight === null ? "null" : e.weight);
+		var dir = (e.dir === null ? "null" : e.dir.label);
+		console.log("addE(app, " + e.v1.label + ", " + e.v2.label + ", " +
+			dir + ", " + w + ", " + Math.round(e.curveX) + ", " + Math.round(e.curveY) + ");");
+	}
+}
+
+/* Preloaded graphs */
+
+function addV(app, x, y, col){
+	x = app['canvas'].width * x / 100;
+	y = app['canvas'].height * y / 100;
+	app['g'].v.push(new Vertice((app['g'].v.length).toString(), x, y, app['colors'][col]));
+}
+
+function addE(app, v1, v2, dir, weight, cx, cy){
+	app['g'].e.push(new Edge(app['g'].v[v1], app['g'].v[v2], app['g'].v[dir], weight, cx, cy));
+}
+
+function bidiakisCube(app){
+	addV(app, 10, 10, 1);
+	addV(app, 15, 20, 1);
+	addV(app, 20, 30, 1);
+	addV(app, 40, 10, 1);
+	addV(app, 45, 20, 1);
+	addV(app, 50, 30, 1);
+	addV(app, 10, 50, 1);
+	addV(app, 25, 50, 1);
+	addV(app, 40, 50, 1);
+	addV(app, 20, 70, 1);
+	addV(app, 35, 70, 1);
+	addV(app, 50, 70, 1);
+	addE(app, 0, 1, null, null, 0, 0);
+	addE(app, 1, 2, null, null, 0, 0);
+	addE(app, 3, 4, null, null, 0, 0);
+	addE(app, 4, 5, null, null, 0, 0);
+	addE(app, 0, 3, null, null, 0, 0);
+	addE(app, 1, 4, null, null, 0, 0);
+	addE(app, 2, 5, null, null, 0, 0);
+	addE(app, 6, 7, null, null, 0, 0);
+	addE(app, 7, 8, null, null, 0, 0);
+	addE(app, 9, 10, null, null, 0, 0);
+	addE(app, 10, 11, null, null, 0, 0);
+	addE(app, 6, 9, null, null, 0, 0);
+	addE(app, 7, 10, null, null, 0, 0);
+	addE(app, 8, 11, null, null, 0, 0);
+	addE(app, 0, 6, null, null, 0, 0);
+	addE(app, 2, 9, null, null, 0, 0);
+	addE(app, 3, 8, null, null, 0, 0);
+	addE(app, 5, 11, null, null, 0, 0);
+}
+
+function demonstratePlanarity(app){
+	addV(app, 9, 87, 0);
+	addV(app, 95, 5, 0);
+	addV(app, 60, 84, 0);
+	addV(app, 90, 74, 0);
+	addV(app, 31, 44, 0);
+	addV(app, 86, 41, 0);
+	addV(app, 8, 42, 0);
+	addV(app, 72, 10, 0);
+	addV(app, 8, 9, 0);
+	addV(app, 82, 90, 0);
+	addV(app, 21, 93, 0);
+	addV(app, 47, 15, 0);
+	addE(app, 0, 1, null, null, 0, 0);
+	addE(app, 1, 2, null, null, 0, 0);
+	addE(app, 3, 4, null, null, 0, 0);
+	addE(app, 4, 5, null, null, 0, 0);
+	addE(app, 0, 3, null, null, 0, 0);
+	addE(app, 1, 4, null, null, -327, -100);
+	addE(app, 2, 5, null, null, 280, -75);
+	addE(app, 6, 7, null, null, 115, 260);
+	addE(app, 7, 8, null, null, -184, 181);
+	addE(app, 9, 10, null, null, 15, -215);
+	addE(app, 10, 11, null, null, -105, -179);
+	addE(app, 6, 9, null, null, 0, 0);
+	addE(app, 7, 10, null, null, 0, 0);
+	addE(app, 8, 11, null, null, 56, 1);
+	addE(app, 0, 6, null, null, -55, -75);
+	addE(app, 2, 9, null, null, 0, 0);
+	addE(app, 3, 8, null, null, 0, 0);
+	addE(app, 5, 11, null, null, -68, -108);
+	addE(app, 9, 0, null, null, 0, 0);
+	addE(app, 6, 3, null, null, 0, 0);
+	addE(app, 6, 8, null, null, 179, 41);
+	addE(app, 8, 5, null, null, 0, 0);
+	addE(app, 8, 4, null, null, 189, -20);
+	addE(app, 3, 1, null, null, -319, 83);
+	addE(app, 2, 11, null, null, 0, 0);
+	addE(app, 2, 10, null, null, 0, 0);
+	addE(app, 10, 8, null, null, 0, 0);
+	addE(app, 7, 9, null, null, 0, 0);
+	addE(app, 5, 1, null, null, 0, 0);
+	addE(app, 9, 1, null, null, 0, 0);
+}
+
+function defaultGraph(app){
+	//bidiakisCube(app);
+	demonstratePlanarity(app);
+	for(var i = 0; i < app['g'].e.length; i++){
+		app['g'].e[i].cacheControlPoint();
+	}
+}
+
+$(window).ready(function(){
+	var app = {'canvas' : document.getElementById('canvas'), 
+				'2d' : canvas.getContext('2d'),
+				'g' : {v : [], e : []},
+				'colors' : ['#32cd32', '#ff0000', '#7ec0ee', '#ffff00'], // 1 - green, 2 - red, 3 - blue, 4 - yellow
+				'tool' : 1, // 1 - Select, 2 - Add Vertice, 3 - Add Edge, 4 - Edge Weight, 5 - Edge Dir, 6 - Delete
+				'bound' : null,
+				'boundType' : null
+			};
+	initEventListeners(app);
+	initUI(app);
+	resize(app);
+	defaultGraph(app);
+	draw(app);
+});
+
