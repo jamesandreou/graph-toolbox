@@ -18,17 +18,23 @@
 }
 
 .canvas-container{
-	width: 100%;
+	width: 500px;
 	height: 100%;
 	order: 2;
 }
 
+.controls{
+	width: 256px;
+	height: 100%;
+	order: 3;
+	background: #141414;
+	text-align: center;
+}
 
 .tool{
 	color: #5c5c5c;
 	width: 100%;
 	text-align: center;
-	padding-bottom: 12px;
 }
 
 .tool:hover{

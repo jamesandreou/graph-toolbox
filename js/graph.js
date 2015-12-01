@@ -357,26 +357,25 @@ function resize(app){
 	document.documentElement.style.overflow = 'hidden';
     document.body.scroll = "no"; 
     // Toolbar
-	var size = Math.floor($('.panel').height() * 0.1);
-	if($(window).height() < 500){
-		$('.label').css('font-size', '8px');
-		$('.panel').width(80);
-	}else{
-		$('.label').css('font-size', '12px');
-		$('.panel').width(128);
-	}
-	$('.tool').css('height', size);
-	$('.tool > img').css('width', size - $('.label').height() - 12);
-	$('.tool > img').css('height', size - $('.label').height() - 12);
-	$('.banner').css('width', size);
-	$('.banner').css('height', size);
-	$('.slider').css('top', $())
+    var bannerSize = Math.floor($('.panel').height() * 0.15)
+	var componentSize = Math.floor($('.panel').height() * 0.1);
+	var topMargin = Math.floor($('.panel').height() * 0.03);
+	$('.panel').width(bannerSize + 8);
+	$('.tool').css('height', componentSize);
+	$('.tool').css('padding-top', topMargin);
+	$('.tool > img').css('width', componentSize - $('.label').height());
+	$('.tool > img').css('height', componentSize - $('.label').height());
+	$('.banner').css('width', bannerSize*0.8);
+	$('.banner').css('height', bannerSize*0.8);
+	$('.banner').css('padding-top', bannerSize*0.1)
 	$('.slider').height($('.tool').height());
 	$('.slider').width(Math.floor($('.panel').width() / 32));
 	setSlider(app);
 	$('.weight-input').css('left', $(window).width() - $('.weight-input').outerWidth() - 12);
+	// Controls
+	
 	// canvas size
-    $('.canvas-container').width($(window).width() - $('.panel').width());
+    $('.canvas-container').width($(window).width() - $('.panel').width() - $('.controls').width());
     var w = $('.canvas-container').width(); 
     var h = $('.canvas-container').height();
     var oldW = app['canvas'].width;
@@ -400,7 +399,10 @@ function resize(app){
 }
 
 function setSlider(app){
-	$('.slider').css('top', $('.tool').first().offset().top + $('.tool').outerHeight() * (app['tool']-1));
+	var pos = $('.tool').first().offset().top + $('.tool').outerHeight() * 
+		(app['tool']-1) + parseInt($('.tool').css('padding-top'));
+		console.log(pos);
+	$('.slider').css('top', pos);
 }
 
 function selectObject(app, x, y){
