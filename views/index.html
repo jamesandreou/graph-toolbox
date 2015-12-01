@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Interactive Graph Theory</title>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="js/graph.js"></script>
+</head>
+<body>
+	<div class="app-container">
+		<div class="panel">
+			<img class='banner' src="assets/k33.svg" alt="" height="80" width="80">
+			<div class="slider"></div>
+			<div id="sel-btn" class="tool active">
+				<img src="assets/sel_btn_0.svg" alt="" height="40" width="40">
+				<div class="label">Selection</div></div>
+			<div id="addv-btn" class="tool">
+				<img src="assets/addv_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Add Vertice</div>
+			</div>
+			<div id="adde-btn" class="tool">
+				<img src="assets/adde_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Add Edge</div>
+			</div>
+			<div id="edgew-btn" class="tool">
+				<img src="assets/edgew_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Add Weight</div>
+			</div>
+			<div id="edged-btn" class="tool">
+				<img src="assets/edged_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Directed</div>
+			</div>
+			<div id="del-btn" class="tool">
+				<img src="assets/del_btn_1.svg" alt="" height="40" width="40">
+				<div class="label">Deletion</div>
+			</div>
+			<input class='weight-input' maxlength='6'></input>
+		</div>
+		<div class="canvas-container">
+			<canvas id="canvas">Get a better browser... Chrome?</canvas>
+		</div>
+		<div class="controls">
+			<div id="planar" class="algorithm">Test Planarity</div>
+		</div>
+	</div>
+</body>
+</html>

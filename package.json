@@ -1,0 +1,18 @@
+{
+  "name": "jandreou",
+  "version": "1.0.0",
+  "description": "Personal website of James Andreou.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "James Andreou",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.12.4",
+    "ejs": "^2.3.1",
+    "express": "^4.12.4",
+    "nan": "^1.8.4",
+    "serve-favicon": "^2.2.1"
+  }
+}
