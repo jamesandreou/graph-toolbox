@@ -484,11 +484,13 @@ function addNewEdgeIfPossible(app, v2){
 }
 
 function throttle(callback, delay) {
-    var previousCall = new Date().getTime() - delay;
+    var locked = false;
     return function() {
-        var time = new Date().getTime();
-        if ((time - previousCall) >= delay) {
-            previousCall = time;
+        if (!locked) {
+            locked = true;
+            setTimeout(function(){
+            	locked = false;
+            }, 5000);
             callback.apply(null, arguments);
         }
     };
@@ -502,7 +504,6 @@ function initUI(app){
 /* ALGORITHMS */
 
 function planarTest(app){
-	genCode(app);
 	// Convert graph to a single string
 	var stringifyGraph = app['g'].v.length.toString() + "-";
 	for(var i = 0; i < app['g'].e.length; i++){
