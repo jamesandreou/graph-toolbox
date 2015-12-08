@@ -10,4 +10,4 @@ Lets start with drawing the curves. When the user clicks on an edge and drags it
 ### Detecting Clicks on Curves:
 While still not trivial, JavaScript will do most of the work for us. We need to use the built in method **isPointInPath**. We now have to create a path surrounding our Bezier curve. The trick is to use two more curves with a slight offset of the original. Using these we can surround the original curve with a thicker curve that acts as our hitbox for the user clicking on edges.
 ## Usage
-When complete there will be a DOCS describing what all the tools and algorithms do, and how to use them.
+npm install npm start
