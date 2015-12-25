@@ -14,7 +14,7 @@ export class Toolbar extends Component{
 	}
 
 	computeSize(state){
-		var toolSize = state.screen.height * 0.14;
+		var toolSize = state.screen.height * 0.12;
 		this.css.width = toolSize;
 		return toolSize;
 	}
@@ -23,7 +23,12 @@ export class Toolbar extends Component{
 		var toolSize = this.computeSize(this.props.state);
 		return (
 			<div style={this.css}>
-				<Tool type="adde" size={toolSize} active={true} />
+				<Tool type="sel" size={toolSize} active={true} />
+				<Tool type="addv" size={toolSize} active={false} />
+				<Tool type="adde" size={toolSize} active={false} />
+				<Tool type="dir" size={toolSize} active={false} />
+				<Tool type="weight" size={toolSize} active={false} />
+				<Tool type="del" size={toolSize} active={false} />
 			</div>
 		);
 	}
