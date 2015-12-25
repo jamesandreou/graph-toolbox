@@ -1,5 +1,6 @@
 # Graph Theory Interactive Tool
-
+## Update
+Currently porting to es6 and react before implementing further features.
 ## What is it?
 A web app to visually create and manipulate graphs and run algorithms on them. This project is made to demonstrate both web development in **JavaScript** and graph theory **algorithms**.
 ## How was it developed?
