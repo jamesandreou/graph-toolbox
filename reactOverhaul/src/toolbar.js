@@ -5,30 +5,43 @@ export class Toolbar extends Component{
 
 	constructor(){
 		super();	
-		this.css = {
-			width : "10%",
-			height : "100%",
-			background : "#141414",
-			color: "white"
+		this.state = {
+			active : 'sel',
+			toolSize : 64
 		};
 	}
 
-	computeSize(state){
-		var toolSize = state.screen.height * 0.12;
-		this.css.width = toolSize;
-		return toolSize;
+	componentWillMount() {
+		this.state.toolSize = this.props.size;
+	}
+
+	componentWillUpdate() {
+		this.state.toolSize = this.props.size;
+	}
+
+	handleClick(i){
+		this.props.onUpdate({activeTool : this.props.tools[i]});
+		this.setState({active : this.props.tools[i]});
 	}
 
 	render(){
-		var toolSize = this.computeSize(this.props.state);
+		let style = {
+			background : '#141414',
+			position: "absolute",
+			top : "0",
+			left : "0",
+			textAlign : "center",
+			width : this.state.toolSize,
+			height : "100%"
+		};
 		return (
-			<div style={this.css}>
-				<Tool type="sel" size={toolSize} active={true} />
-				<Tool type="addv" size={toolSize} active={false} />
-				<Tool type="adde" size={toolSize} active={false} />
-				<Tool type="dir" size={toolSize} active={false} />
-				<Tool type="weight" size={toolSize} active={false} />
-				<Tool type="del" size={toolSize} active={false} />
+			<div style={style}>
+				{this.props.tools.map(function(tool, i) {
+		          return (
+		            <Tool onClickEvent={this.handleClick.bind(this, i)} key={i} type={tool}
+		            size={this.state.toolSize} active={this.state.active === tool} />
+		          );
+		        }, this)}
 			</div>
 		);
 	}
