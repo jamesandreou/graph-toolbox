@@ -14,21 +14,24 @@ export class App extends Component {
     };
   }
 
-  handleResize(e){
-    this.setState({screen : {width : window.innerWidth,
-                height : window.innerHeight}});
-    this.display.resize(this.refs.canvas);
-    this.display.render(this.state);
+  handleResize(){
+      this.setState({screen : {width : window.innerWidth,
+                  height : window.innerHeight}});
+      this.display.resize(this.refs.canvas);
+      this.display.render(this.state);
+      this.forceUpdate();
   }
 
   componentDidMount(){
-    window.addEventListener('resize', this.handleResize.bind(this));
+    window.addEventListener('resize', (function(){
+      setTimeout(this.handleResize.bind(this), 100);
+    }).bind(this));
     this.display = new Display({state : this.state, ref : this.refs.canvas});
     this.display.render(this.state);
   }
 
   componentWillUnmount(){
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize');
   }
 
   onUpdate(newState){

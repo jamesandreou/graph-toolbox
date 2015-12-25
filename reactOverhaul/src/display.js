@@ -1,16 +1,22 @@
+import Graph from './graph';
+import Generator from './generator';
+
 export default class Display{
 
 	constructor(args){
 		this.state = args.state;
 		this.ctx = args.ref.getContext('2d');
 		this.dim = {width : args.ref.width, height: args.ref.height};
-		console.log(this.dim);
+		this.g = new Graph();
+		this.gen = new Generator(this.g);
+		this.gen.k5(this.dim);
 	}
 
 	resize(ref){
 		this.ctx = ref.getContext('2d');
+		let oldDim = this.dim;
 		this.dim = {width : ref.width, height: ref.height};
-		console.log(this.dim);
+		this.g.resize(oldDim, this.dim);
 	}
 
 	renderGrid(){
@@ -34,7 +40,9 @@ export default class Display{
 	}
 
 	render(state){
+		this.state = state;
 		this.renderGrid();
+		this.g.draw(this.ctx, this.dim);
 	}
 
 }
