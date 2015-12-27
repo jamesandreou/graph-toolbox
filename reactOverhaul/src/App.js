@@ -60,7 +60,7 @@ export class App extends Component {
       <div style={style}>
         <Toolbar onUpdate={this.onUpdate.bind(this)} state={this.state} tools={tools} size={toolSize} />
         <canvas ref="canvas" style={canvasStyle} width={canvasWidth} height={style.height}>You have a bad browser..</canvas>
-        <Panel size={panelSize} />
+        <Panel display={this.display} size={panelSize} />
       </div>
     );
   }

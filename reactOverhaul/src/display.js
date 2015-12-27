@@ -9,7 +9,11 @@ export default class Display{
 		this.dim = {width : args.ref.width, height: args.ref.height};
 		this.g = new Graph();
 		this.gen = new Generator(this.g);
-		this.gen.k5(this.dim);
+		this.gen.bidiakisCube(this.dim);
+	}
+
+	executeCommand(cmd){
+		console.log("Executing the command '" + cmd + "'.");
 	}
 
 	resize(ref){
