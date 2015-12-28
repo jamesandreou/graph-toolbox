@@ -30,7 +30,8 @@ export class Panel extends Component{
 			right : "0",
 			textAlign : "center",
 			width : this.props.size,
-			height : "100%"
+			height : "100%",
+			fontFamily : "Courier New"
 		};
 		return (
 			<div style={style}>
@@ -42,7 +43,8 @@ export class Panel extends Component{
 						);
 					}, this)}
 				</span>
-				<CommandBox section={this.state.activeSection} display={this.props.display} size={this.state.boxHeight}/>
+				<CommandBox section={this.state.activeSection} display={this.props.display} 
+				size={{h : this.state.boxHeight, w : this.props.size}}/>
 			</div>
 		);
 	}

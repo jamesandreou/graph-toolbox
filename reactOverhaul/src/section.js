@@ -50,7 +50,6 @@ export class PanelSection extends Component{
 			paddingTop : '6px',
 			paddingBottom : '6px',
 			overflow : "hidden",
-			fontFamily : "Courier New",
 			fontWeight : (this.props.active || this.state.hover) ? "bold" : "normal",
 			fontSize : textSize,
 			textAlign : "center",
