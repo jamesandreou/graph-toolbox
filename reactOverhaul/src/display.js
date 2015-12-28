@@ -3,17 +3,49 @@ import Generator from './generator';
 
 export default class Display{
 
-	constructor(args){
-		this.state = args.state;
-		this.ctx = args.ref.getContext('2d');
-		this.dim = {width : args.ref.width, height: args.ref.height};
+	constructor(){
 		this.g = new Graph();
 		this.gen = new Generator(this.g);
+	}
+
+	initCanvas(ref){
+		this.ctx = ref.getContext('2d');
+		this.dim = {width : ref.width, height: ref.height};
 		this.gen.bidiakisCube(this.dim);
 	}
 
-	executeCommand(cmd){
+	executeCommand(section, cmd){
 		console.log("Executing the command '" + cmd + "'.");
+		switch (section){
+			case 'Algorithms':
+			case 'Tools':
+				if(cmd === 'Center Graph'){
+					this.centerGraph();
+				}
+				break;
+			case 'Graphs':
+		}
+	}
+
+	centerGraph(){
+		if(this.g.isEmpty()) return;
+		let minx = this.dim.width + 1;
+		let miny = this.dim.height + 1;
+		let maxx = -1;
+		let maxy = -1;
+		for(let v of this.g.v){
+			if(v.x < minx) minx = v.x;
+			if(v.y < miny) miny = v.y;
+			if(v.x > maxx) maxx = v.x;
+			if(v.y > maxy) maxy = v.y;
+		}
+		let shiftX = (minx + this.dim.width - maxx) / 2;
+		let shiftY = (miny + this.dim.height - maxy) / 2;
+		for(let v of this.g.v){
+			v.x = shiftX + v.x - minx;
+			v.y = shiftY + v.y - miny;
+		}
+		this.render(this.state);
 	}
 
 	resize(ref){
@@ -45,7 +77,12 @@ export default class Display{
 
 	render(state){
 		this.state = state;
+		this.ctx.clearRect(0, 0, this.dim.width, this.dim.height);
 		this.renderGrid();
+		this.ctx.beginPath();
+		this.ctx.moveTo(this.dim.width, 200);
+		this.ctx.lineTo(this.dim.width, 400);
+		this.ctx.stroke();
 		this.g.draw(this.ctx, this.dim);
 	}
 

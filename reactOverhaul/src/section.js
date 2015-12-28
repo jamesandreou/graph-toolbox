@@ -17,6 +17,18 @@ export class PanelSection extends Component{
 		this.setState({hover : false});
 	}
 
+	handleResize(){
+      this.props.heightSet(this.refs.sec.offsetHeight);
+      this.forceUpdate();
+	}
+
+	componentDidMount(){
+	    window.addEventListener('resize', (function(){
+	      setTimeout(this.handleResize.bind(this), 100);
+	    }).bind(this));
+		this.props.heightSet(this.refs.sec.offsetHeight);
+	}
+
 	computeTextSize(text, bound){
 		let canvas = document.createElement("canvas");
 	    let context = canvas.getContext("2d");
@@ -52,7 +64,7 @@ export class PanelSection extends Component{
 			background : (this.props.active) ? "#84bd00" : "#2c2c2c"
 		};
 		return (
-			<div onClick={this.props.onClickEvent} onMouseEnter={this.handleMouseEnter.bind(this)} 
+			<div ref="sec" onClick={this.props.onClickEvent} onMouseEnter={this.handleMouseEnter.bind(this)} 
 				onMouseLeave={this.handleMouseLeave.bind(this)} style={{display : "inline-block"}}>
 				<div style={textStyle}>{this.props.text}</div>
 				<div style={markerStyle}/>

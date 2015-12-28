@@ -31,18 +31,27 @@ export default class Graph{
 		}));
 	}
 
+	isEmpty(){
+		return (this.v.length <= 0);
+	}
+
+	cache(){
+		for(let e of this.e){
+			e.cacheControlPoints();
+		}
+	}
+
 	resize(oldDim, newDim){
 		let factorX = newDim.width / oldDim.width;
 		let factorY = newDim.height / oldDim.height;
 		for(let v of this.v){
 			v.setPos(v.x * factorX, v.y * factorY);
 		}
-		for(let e of this.e){
-			e.cacheControlPoints();
-		}
+		this.cache();
 	}
 
 	draw(ctx, dim){
+		this.cache();
 		for(let e of this.e){
 			e.draw(ctx, dim);
 		}

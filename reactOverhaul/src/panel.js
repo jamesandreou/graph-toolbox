@@ -9,7 +9,8 @@ export class Panel extends Component{
 		super();
 		this.sections = ["Tools", "Algorithms", "Graphs"];
 		this.state = {
-			activeSection : "Algorithms"
+			activeSection : "Algorithms",
+			boxHeight : window.innerHeight - 30
 		};
 	}
 
@@ -17,12 +18,16 @@ export class Panel extends Component{
 		this.setState({activeSection : this.sections[i]});
 	}
 
+	determineBoxHeight(h){
+		this.setState({boxHeight : window.innerHeight - h});
+	}
+
 	render(){
 		let style = {
 			background : '#121314',
 			position: "absolute",
 			top : "0",
-			left : window.innerWidth - this.props.size,
+			right : "0",
 			textAlign : "center",
 			width : this.props.size,
 			height : "100%"
@@ -33,11 +38,11 @@ export class Panel extends Component{
 					{this.sections.map(function(sec, i){
 						return(
 							<PanelSection onClickEvent={this.setSection.bind(this, i)} size={this.props.size / 3} text={sec} 
-							key={i} active={this.state.activeSection === sec} />
+							key={i} active={this.state.activeSection === sec} heightSet={this.determineBoxHeight.bind(this)}/>
 						);
 					}, this)}
 				</span>
-				<CommandBox section={this.state.activeSection}/>
+				<CommandBox section={this.state.activeSection} display={this.props.display} size={this.state.boxHeight}/>
 			</div>
 		);
 	}

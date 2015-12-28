@@ -12,6 +12,7 @@ export class App extends Component {
                 height : window.innerHeight},
       activeTool : 'sel'
     };
+    this.display = new Display();
   }
 
   handleResize(){
@@ -26,7 +27,7 @@ export class App extends Component {
     window.addEventListener('resize', (function(){
       setTimeout(this.handleResize.bind(this), 100);
     }).bind(this));
-    this.display = new Display({state : this.state, ref : this.refs.canvas});
+    this.display.initCanvas(this.refs.canvas);
     this.display.render(this.state);
   }
 
