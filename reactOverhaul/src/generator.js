@@ -1,7 +1,19 @@
 export default class graphGenerator{
 
-	constructor(args){
-		this.g = args;
+	constructor(g){
+		this.g = g;
+	}
+
+	execute(cmd, dim){
+		this.clear();
+		switch(cmd){
+			case 'k5' :
+				this.k5(dim);
+				break;
+			case 'cube':
+				this.bidiakisCube(dim);
+				break;
+		}
 	}
 
 	clear(){

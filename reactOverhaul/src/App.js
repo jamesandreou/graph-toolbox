@@ -19,7 +19,7 @@ export class App extends Component {
       this.setState({screen : {width : window.innerWidth,
                   height : window.innerHeight}});
       this.display.resize(this.refs.canvas);
-      this.display.render(this.state);
+      this.display.render();
       this.forceUpdate();
   }
 
@@ -37,6 +37,8 @@ export class App extends Component {
 
   onUpdate(newState){
     this.setState(newState);
+    this.display.tool = newState.activeTool;
+    this.display.bound = {obj : null, type : null};
   }
 
   render() {
@@ -60,7 +62,11 @@ export class App extends Component {
     return (
       <div style={style}>
         <Toolbar onUpdate={this.onUpdate.bind(this)} state={this.state} tools={tools} size={toolSize} />
-        <canvas ref="canvas" style={canvasStyle} width={canvasWidth} height={style.height}>You have a bad browser..</canvas>
+        <canvas ref="canvas" style={canvasStyle} width={canvasWidth} height={style.height}
+          onMouseDown={this.display.handleMouseDown.bind(this.display)} 
+          onMouseMove={this.display.handleMouseMove.bind(this.display)}
+          onMouseUp={this.display.handleMouseUp.bind(this.display)}
+          >You have a bad browser..</canvas>
         <Panel display={this.display} size={panelSize} />
       </div>
     );

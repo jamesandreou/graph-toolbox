@@ -7,7 +7,6 @@ export default class Edge{
 		this.weight = args.weight;
 		this.curveX = args.curveX;
 		this.curveY = args.curveY;
-		this.bound = false;
 		this.cx = 0;
 		this.cy = 0;
 		this.wx = 0;
@@ -27,18 +26,10 @@ export default class Edge{
 		this.wy = py;
 	}
 
-	bind(){
-		this.bound = true;
-	}
-
-	release(){
-		this.bound = false;
-	}
-
-	draw(ctx, dim){
+	draw(ctx, dim, bound){
 		let r = Math.min(dim.width, dim.height) / 40;
 		ctx.strokeStyle = '#000000';
-		ctx.lineWidth = this.bound ? 4 : 2;
+		ctx.lineWidth = bound ? 4 : 2;
 		ctx.beginPath();
 		ctx.moveTo(this.v1.x, this.v1.y);
 		ctx.quadraticCurveTo(this.c1, this.c2, this.v2.x, this.v2.y);

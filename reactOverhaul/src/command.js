@@ -46,7 +46,7 @@ export class Command extends Component{
 			 	<div style={nameStyle}>{cmd.name}</div>
 			 	<svg viewBox="0 0 64 32" height={this.props.size.h * 0.5} width={this.props.size.w *0.8} 
 			 		preserveAspectRatio="xMidYMid meet" fitstyle={{verticalAlign: "middle"}}>
-					{this.cmdList.getIcon(this.props.cmd, '#fff')}
+					{this.cmdList.getIcon(this.props.cmd, '#ffffff')}
 				</svg>
 			 	<div style={descStyle}>{cmd.desc}</div>
 			 </div>

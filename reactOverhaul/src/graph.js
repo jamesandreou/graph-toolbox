@@ -9,6 +9,14 @@ export default class Graph{
 		this.e = [];
 	}
 
+	addVerticeReal(realX, realY, col){
+		this.v.push(new Vertice({
+			label : this.v.length, 
+			x : realX, 
+			y : realY, 
+			col : col}));
+	}
+
 	addVertice(dim, x, y, col){
 		let realX = dim.width * x / 100;
 		let realY = dim.height * y / 100;
@@ -31,6 +39,27 @@ export default class Graph{
 		}));
 	}
 
+	addNewEdgeIfPossible(v1, v2){
+		if(v1 != null && v2 != null && v1 !== v2){
+			for(let e of this.e){
+				if((e.v1 === v1 && e.v2 === v2) || (e.v1 === v2 && e.v2 === v1)){
+					return false;
+				}
+			}
+		}else{
+			return false;
+		}
+		this.e.push(new Edge({
+			v1 : v1,
+			v2 : v2,
+			dir : null,
+			weight : null,
+			curveX : 0,
+			curveY : 0
+		}));
+		return true;
+	}
+
 	isEmpty(){
 		return (this.v.length <= 0);
 	}
@@ -50,13 +79,13 @@ export default class Graph{
 		this.cache();
 	}
 
-	draw(ctx, dim){
+	draw(ctx, dim, bound){
 		this.cache();
 		for(let e of this.e){
-			e.draw(ctx, dim);
+			e.draw(ctx, dim, e === bound);
 		}
 		for(let v of this.v){
-			v.draw(ctx, dim);
+			v.draw(ctx, dim, v === bound);
 		}
 	}
 

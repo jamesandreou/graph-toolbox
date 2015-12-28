@@ -64,7 +64,7 @@ export default class CommandList{
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.1368243,0,0,1.1368243,-1.7610538,56.757239)" fill={col}/>
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.1368243,0,0,1.1368243,20.491547,56.757239)" fill={col}/>
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.1368243,0,0,1.1368243,54.298382,56.757239)" fill={col}/>
-					<path strokeLinejoin="miter" d="m3.1857,28.814,9.7474-9.0342,9.2719-8.844,9.89-8.844,9.8425,9.4146,17.878,17.45-34.568-0.04755,16.689-17.593-20.065-0.0951,3.471,17.688z" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="1px" fill="none"/>
+					<path strokeLinejoin="miter" d="m3.1857,28.814,9.7474-9.0342,9.2719-8.844,9.89-8.844,9.8425,9.4146,17.878,17.45-34.568-0.04755,16.689-17.593-20.065-0.0951,3.471,17.688z" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="0.75" fill="none"/>
 					</g>
 				);
 			case 'mincov' :
@@ -79,9 +79,9 @@ export default class CommandList{
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.0384052,-0.00799862,0.00799862,1.0384052,37.659315,56.097177)" fill={col}/>
 					<path strokeLinejoin="miter" d="M6.7096,59.685,6.6522,36.282,22.99,36.156,42.34,36.191,42.46,59.778,23.479,59.678,23.175,36.216" stroke={col} strokeLinecap="butt" strokeWidth="0.91345334px" fill="none"/>
 					<path strokeLinejoin="miter" d="M23.419,59.863,41.97,36.071,58.797,59.529" stroke={col} strokeLinecap="butt" strokeWidth="0.91345334px" fill="none"/>
-					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.6479094,-0.01269351,0.01269351,1.6479094,-0.38754577,30.826555)" stroke={col} strokeDasharray="none" stroke-miterlimit="4" strokeWidth="0.74418437" fill="none"/>
-					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.6479094,-0.01269351,0.01269351,1.6479094,34.946546,30.424468)" stroke={col} strokeDasharray="none" stroke-miterlimit="4" strokeWidth="0.74418437" fill="none"/>
-					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.6479094,-0.01269351,0.01269351,1.6479094,16.224988,53.953582)" stroke={col} strokeDasharray="none" stroke-miterlimit="4" strokeWidth="0.74418437" fill="none"/>
+					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.6479094,-0.01269351,0.01269351,1.6479094,-0.38754577,30.826555)" stroke={col} strokeDasharray="none" stroke-miterlimit="4" strokeWidth="0.4" fill="none"/>
+					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.6479094,-0.01269351,0.01269351,1.6479094,34.946546,30.424468)" stroke={col} strokeDasharray="none" stroke-miterlimit="4" strokeWidth="0.4" fill="none"/>
+					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.6479094,-0.01269351,0.01269351,1.6479094,16.224988,53.953582)" stroke={col} strokeDasharray="none" stroke-miterlimit="4" strokeWidth="0.4" fill="none"/>
 					</g>
 				);
 			case 'mst' :
@@ -93,9 +93,9 @@ export default class CommandList{
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.0384052,-0.00799862,0.00799862,1.0384052,11.658841,47.359348)" fill={col}/>
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.0384052,-0.00799862,0.00799862,1.0384052,38.168575,57.182283)" fill={col}/>
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.0384052,-0.00799862,0.00799862,1.0384052,50.839029,48.969372)" fill={col}/>
-					<path strokeLinejoin="miter" d="M3.9674,4.4974,16.004,18.955,33.151,11.961,42.7,29.041" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="1px" fill="none"/>
-					<path strokeLinejoin="miter" d="M55.812,20.838,33.42,11.692" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="1px" fill="none"/>
-					<path strokeLinejoin="miter" d="M54.871,3.4215,33.622,11.625" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="1px" fill="none"/>
+					<path strokeLinejoin="miter" d="M3.9674,4.4974,16.004,18.955,33.151,11.961,42.7,29.041" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="0.75" fill="none"/>
+					<path strokeLinejoin="miter" d="M55.812,20.838,33.42,11.692" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="0.75" fill="none"/>
+					<path strokeLinejoin="miter" d="M54.871,3.4215,33.622,11.625" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="0.75" fill="none"/>
 					</g>
 				);
 			case 'topo' :
@@ -106,10 +106,10 @@ export default class CommandList{
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.0384052,-0.00799862,0.00799862,1.0384052,12.331275,43.697726)" fill={col}/>
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.0384052,-0.00799862,0.00799862,1.0384052,41.530747,43.697726)" fill={col}/>
 					<path d="m6.1813,3.5661a1.7593,1.7593,0,1,1,-3.5186,0,1.7593,1.7593,0,1,1,3.5186,0z" transform="matrix(1.0384052,-0.00799862,0.00799862,1.0384052,55.277096,43.697726)" fill={col}/>
-					<path strokeLinejoin="miter" d="m3.3622,15.324,29.856-0.06724s-20.644-9.2796-29.856,0.06724z" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="1px" fill="none"/>
-					<path strokeLinejoin="miter" d="m45.995,15.391,14.323-0.06724" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="1px" fill="none"/>
-					<path strokeLinejoin="miter" d="m17.416,15.055s13.381,12.575,29.184,0.40346" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="1px" fill="none"/>
-					<path strokeLinejoin="miter" d="m17.013,14.987s26.561-12.709,43.238,0.40346" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="1px" fill="none"/>
+					<path strokeLinejoin="miter" d="m3.3622,15.324,29.856-0.06724s-20.644-9.2796-29.856,0.06724z" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="0.75" fill="none"/>
+					<path strokeLinejoin="miter" d="m45.995,15.391,14.323-0.06724" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="0.75" fill="none"/>
+					<path strokeLinejoin="miter" d="m17.416,15.055s13.381,12.575,29.184,0.40346" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="0.75" fill="none"/>
+					<path strokeLinejoin="miter" d="m17.013,14.987s26.561-12.709,43.238,0.40346" transform="translate(0,32)" stroke={col} strokeLinecap="butt" strokeWidth="0.75" fill="none"/>
 					</g>
 				);
 			case 'k5' :

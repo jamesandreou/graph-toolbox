@@ -5,7 +5,6 @@ export default class Vertice{
 		this.x = args.x;
 		this.y = args.y;
 		this.col = this.getColor(args.col);
-		this.bound = false;
 	}
 
 	setPos(x, y){
@@ -30,22 +29,14 @@ export default class Vertice{
 		}
 	}
 
-	bind(){
-		this.bound = true;
-	}
-
-	release(){
-		this.bound = false;
-	}
-
-	draw(ctx, dim){
+	draw(ctx, dim, bound){
 		let r = Math.min(dim.width, dim.height) / 40;
 		ctx.font = 'bolder ' + (r * 1.25) + 'px Georgia';
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
 		ctx.fillStyle = this.col;
 		ctx.strokeStyle = '#000000';
-		ctx.lineWidth = this.bound ? 4 : 2;
+		ctx.lineWidth = bound ? 4 : 2;
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, r, 0, Math.PI * 2, false);
 		ctx.fill();
