@@ -44,7 +44,6 @@ export class App extends Component {
   }
 
   update(){
-    console.log("Updating app..");
     this.forceUpdate();
   }
 

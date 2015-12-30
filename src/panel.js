@@ -23,7 +23,6 @@ export class Panel extends Component{
 	}
 
 	render(){
-		console.log('render ' + this.state.activeSection);
 		let style = {
 			width : this.props.size,
 		};

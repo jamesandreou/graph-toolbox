@@ -1,5 +1,3 @@
-#include <node.h>
-#include <v8.h>
 #include <nan.h>
 #include <string>
 #include <vector>
@@ -37,33 +35,36 @@ struct face_counter : public planar_face_traversal_visitor{
   void begin_face() { ++count; }
   int count;
 };
+
 string getCords();
 
-NAN_METHOD(sum) {
-  NanScope();
-  string s = getCords();
-  NanReturnValue(s.c_str());
+void Res(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+	string s = getCords();		
+ 	info.GetReturnValue().Set(Nan::New(s).ToLocalChecked());
 }
 
-NAN_METHOD(add){
-	NanScope();
-	int nv1 = args[0]->Uint32Value();
-	int nv2 = args[1]->Uint32Value();
-	v.push_back(make_pair(nv1, nv2));
-	NanReturnValue(NanNew<Number>(1));
+void Add(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+	int arg0 = info[0]->Uint32Value();
+	int arg1 = info[1]->Uint32Value();
+	v.push_back(make_pair(arg0, arg1));
+	v8::Local<v8::Number> num = Nan::New(1);
+	info.GetReturnValue().Set(num);
 }
 
-NAN_METHOD(init){
-	NanScope();
+void InitGraph(const Nan::FunctionCallbackInfo<v8::Value>& info) {
 	v.clear();
-	nVertices = args[0]->Uint32Value();
-	NanReturnValue(NanNew<Number>(1));
+	nVertices = info[0]->Uint32Value();
+	v8::Local<v8::Number> num = Nan::New(1);
+	info.GetReturnValue().Set(num);
 }
 
 void Init(Handle<Object> exports){
-	exports->Set(NanNew<String>("initGraph"), NanNew<FunctionTemplate>(init)->GetFunction());
-	exports->Set(NanNew<String>("sum"), NanNew<FunctionTemplate>(sum)->GetFunction());
-	exports->Set(NanNew<String>("addEdge"), NanNew<FunctionTemplate>(add)->GetFunction());
+	exports->Set(Nan::New("initGraph").ToLocalChecked(), 
+		Nan::New<v8::FunctionTemplate>(InitGraph)->GetFunction());
+	exports->Set(Nan::New("result").ToLocalChecked(), 
+		Nan::New<v8::FunctionTemplate>(Res)->GetFunction());
+	exports->Set(Nan::New("addEdge").ToLocalChecked(), 
+		Nan::New<v8::FunctionTemplate>(Add)->GetFunction());
 }
 
 NODE_MODULE(planar, Init);

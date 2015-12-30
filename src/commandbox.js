@@ -14,7 +14,7 @@ export class CommandBox extends Component{
 	}
 
 	execute(i){
-		this.props.display.executeCommand(this.state.section, this.box[this.props.section][i]);
+		this.props.display.executeCommand(this.props.section, this.box[this.props.section][i]);
 	}
 
 	computeTextSize(text, bound){
@@ -47,7 +47,6 @@ export class CommandBox extends Component{
 	}
 
 	render(){
-		console.log('render box ' + this.props.section);
 		let style = {
 			height: this.props.size.h
 		};
