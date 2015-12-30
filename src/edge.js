@@ -11,6 +11,7 @@ export default class Edge{
 		this.cy = 0;
 		this.wx = 0;
 		this.wy = 0;
+		this.col = this.getColor(0);
 		this.cacheControlPoints();
 	}
 
@@ -28,7 +29,7 @@ export default class Edge{
 
 	draw(ctx, dim, bound){
 		let r = Math.min(dim.width, dim.height) / 40;
-		ctx.strokeStyle = '#000000';
+		ctx.strokeStyle = this.col;
 		ctx.lineWidth = bound ? 4 : 2;
 		ctx.beginPath();
 		ctx.moveTo(this.v1.x, this.v1.y);
@@ -69,6 +70,17 @@ export default class Edge{
 			ctx.lineTo(p1x, p1y);
 			ctx.lineTo(endX + r / 3 * Math.cos(angle-Math.PI/2), endY + r / 3 * Math.sin(angle-Math.PI/2));
 			ctx.stroke();
+		}
+	}
+
+	getColor(n){
+		switch(n){
+			case 0 :
+				return '#000000';
+			case 1 :
+				return '#ff0000';
+			default:
+				return '#000000';
 		}
 	}
 

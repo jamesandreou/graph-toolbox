@@ -2,15 +2,17 @@ import Graph from './graph';
 import Generator from './generator';
 import Algorithm from './algorithm';
 import PanelTools from './paneltools';
+import Animation from './animate';
 
 export default class Display{
 
 	constructor(app, g){
 		this.app = app;
 		this.g = g;
+		this.animate = new Animation(g, this);
 		this.gen = new Generator(this.g);
 		this.tools = new PanelTools(this.g);
-		this.algs =  new Algorithm(this.g);
+		this.algs =  new Algorithm(this.g, this);
 		this.tool = 'sel';
 		this.bound = {obj : null, type : null};
 	}
@@ -73,10 +75,10 @@ export default class Display{
 		this.ctx.lineTo(this.dim.width, 400);
 		this.ctx.stroke();
 		this.g.draw(this.ctx, this.dim, this.bound.obj);
-		this.app.update();
 	}
 
 	handleMouseDown(e){
+		let shouldUpdate = false;
 		e.preventDefault();
 	    let x = Math.floor(e.pageX-this.dim.off.left);
 	    let y = Math.floor(e.pageY-this.dim.off.top);
@@ -124,6 +126,7 @@ export default class Display{
 	    				this.bound.obj.dir = null;
 	    				this.bound = selectDirection;
 	    			}
+	    			shouldUpdate = true;
 	    		}else{
 	    			this.bound = this.selectObject(x, y);
 	    		}
@@ -134,6 +137,7 @@ export default class Display{
 	    		break;
 	    }
 	    this.render();
+	    if(shouldUpdate) this.app.update();
 	}
 
 	handleMouseMove(e){
