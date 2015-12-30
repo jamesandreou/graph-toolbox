@@ -14,7 +14,7 @@ export class CommandBox extends Component{
 	}
 
 	execute(i){
-		this.props.display.executeCommand(this.props.section, this.box[this.props.section][i]);
+		this.props.display.executeCommand(this.state.section, this.box[this.props.section][i]);
 	}
 
 	computeTextSize(text, bound){
@@ -47,17 +47,21 @@ export class CommandBox extends Component{
 	}
 
 	render(){
+		console.log('render box ' + this.props.section);
 		let style = {
-			width : '100%',
-			overflow: 'auto',
 			height: this.props.size.h
 		};
 		return (
-			<div style={style}> 
+			<div className='commandBox' style={style}> 
 				{this.box[this.props.section].map(function(cmd, i){
 					return (
-						<Command cmd={cmd} sec={this.props.section} size={{h: this.props.size.h * 0.2, w : this.props.size.w}}
-							key={i} onClickEvent={this.execute.bind(this, i)} nameSize={this.computeNameSize()}/>
+						<Command graph={this.props.graph} 
+						cmd={cmd} 
+						sec={this.props.section} 
+						size={{h: this.props.size.h * 0.2, w : this.props.size.w}}
+						key={i} 
+						onClickEvent={this.execute.bind(this, i)} 
+						nameSize={this.computeNameSize()}/>
 					);
 				}, this)}
 			</div>

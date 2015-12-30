@@ -1,2 +1,0 @@
-# Graph Toolbox (graphtoolbox.com)
-

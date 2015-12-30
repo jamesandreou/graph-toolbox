@@ -1,0 +1,73 @@
+body{
+	overflow: hidden;
+}
+
+canvas{
+    display: block;
+    position: absolute;
+    top: 0;
+    height: 100%;
+}
+
+.command{
+	padding-top : 6px;
+	padding-bottom : 6px;
+	width : 100%;
+	cursor : pointer;
+}
+
+.commandName{
+	font-weight : bold;
+	text-align : center;
+}
+
+.commandBox{
+	width : 100%;
+	overflow: auto;
+}
+
+.panel{
+	background : #121314;
+	position: absolute;
+	top : 0;
+	right : 0;
+	text-align : center;
+	height : 100%;
+	font-family : Courier New;
+}
+
+.sectionText{
+	padding-top : 6px;
+	padding-bottom : 6px;
+	overflow : hidden;
+	text-align : center;
+	cursor : pointer;
+}
+
+.marker{
+	height : 2px;
+	cursor : pointer;
+}
+
+.tool{
+	width : 100%;
+	text-align: center;
+	cursor : pointer;
+}
+
+.toolMarker{
+	width : 3%;
+	background : #84bd00;
+	position : absolute;
+	left : 0;
+}
+
+.toolbar{
+	background : #121314;
+	position: absolute;
+	top : 0;
+	left : 0;
+	text-align : center;
+	height : 100%;
+	overflow : hidden;
+}

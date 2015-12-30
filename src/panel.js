@@ -23,18 +23,12 @@ export class Panel extends Component{
 	}
 
 	render(){
+		console.log('render ' + this.state.activeSection);
 		let style = {
-			background : '#121314',
-			position: "absolute",
-			top : "0",
-			right : "0",
-			textAlign : "center",
 			width : this.props.size,
-			height : "100%",
-			fontFamily : "Courier New"
 		};
 		return (
-			<div style={style}>
+			<div className='panel' style={style}>
 				<span>
 					{this.sections.map(function(sec, i){
 						return(
@@ -43,7 +37,7 @@ export class Panel extends Component{
 						);
 					}, this)}
 				</span>
-				<CommandBox section={this.state.activeSection} display={this.props.display} 
+				<CommandBox graph={this.props.graph} section={this.state.activeSection} display={this.props.display} 
 				size={{h : this.state.boxHeight, w : this.props.size}}/>
 			</div>
 		);

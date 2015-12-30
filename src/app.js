@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Toolbar } from './toolbar';
 import { Panel } from './panel';
 import Display from './display';
+import Graph from './graph'
 
 export class App extends Component {
 
@@ -12,7 +13,8 @@ export class App extends Component {
                 height : window.innerHeight},
       activeTool : 'sel'
     };
-    this.display = new Display();
+    this.g = new Graph();
+    this.display = new Display(this, this.g);
   }
 
   handleResize(){
@@ -41,6 +43,11 @@ export class App extends Component {
     this.display.bound = {obj : null, type : null};
   }
 
+  update(){
+    console.log("Updating app..");
+    this.forceUpdate();
+  }
+
   render() {
     let tools = ['sel', 'addv', 'adde', 'dir', 'weight', 'del'];
     let style = {
@@ -51,14 +58,10 @@ export class App extends Component {
     let panelSize = Math.floor(style.width * 0.2);
     let canvasWidth = Math.floor(style.width - toolSize - panelSize);
     let canvasStyle = {
-        display: "block",
-        backgroundColor: "#F3ECE2",
-        position: "absolute",
-        top: '0',
-        left: toolSize,
-        width: canvasWidth,
-        height: '100%'
+            left: toolSize,
+            width: canvasWidth
     };
+
     return (
       <div style={style}>
         <Toolbar onUpdate={this.onUpdate.bind(this)} state={this.state} tools={tools} size={toolSize} />
@@ -67,7 +70,7 @@ export class App extends Component {
           onMouseMove={this.display.handleMouseMove.bind(this.display)}
           onMouseUp={this.display.handleMouseUp.bind(this.display)}
           >You have a bad browser..</canvas>
-        <Panel display={this.display} size={panelSize} />
+        <Panel graph={this.g} display={this.display} size={panelSize} />
       </div>
     );
   }

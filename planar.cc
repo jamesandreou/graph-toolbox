@@ -1,4 +1,6 @@
-#include <node_modules/nan/nan.h>
+#include <node.h>
+#include <v8.h>
+#include <nan.h>
 #include <string>
 #include <vector>
 #include <utility>
@@ -21,6 +23,7 @@
 using namespace v8;
 using namespace std;
 using namespace boost;
+using namespace Nan;
 
 vector <pair <int, int> > v(0);
 int nVertices;

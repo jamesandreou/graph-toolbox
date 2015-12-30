@@ -25,22 +25,12 @@ export class Toolbar extends Component{
 	}
 
 	render(){
-		let style = {
-			background : '#121314',
-			position: "absolute",
-			top : "0",
-			left : "0",
-			textAlign : "center",
-			width : this.state.toolSize,
-			height : "100%",
-			overflow : "hidden"
-		};
 		let padding = {
 			width : this.state.toolSize,
 			height : Math.floor(this.state.toolSize * 0.25)
 		}
 		return (
-			<div style={style}>
+			<div className='toolbar' style={{width : this.state.toolSize}}>
 				<svg viewBox="0 0 64 64" width={this.state.toolSize * 0.9} height={this.state.toolSize * 0.9} preserveAspectRatio="xMidYMid meet" fitstyle={{verticalAlign: "middle"}}>
 					{this.renderBanner()}
 				</svg>

@@ -47,26 +47,19 @@ export class PanelSection extends Component{
 		let textSize = this.computeTextSize("Algorithms", this.props.size);
 		let textStyle = {
 			width : this.props.size,
-			paddingTop : '6px',
-			paddingBottom : '6px',
-			overflow : "hidden",
 			fontWeight : (this.props.active || this.state.hover) ? "bold" : "normal",
 			fontSize : textSize,
-			textAlign : "center",
-			color : (this.props.active || this.state.hover) ? "#ffffff" : "#5c5c5c",
-			cursor : "pointer"
+			color : (this.props.active || this.state.hover) ? "#ffffff" : "#5c5c5c"
 		};
 		let markerStyle = {
 			width : this.props.size,
-			height : "2px",
-			cursor : "pointer",
 			background : (this.props.active) ? "#84bd00" : "#2c2c2c"
 		};
 		return (
 			<div ref="sec" onClick={this.props.onClickEvent} onMouseEnter={this.handleMouseEnter.bind(this)} 
 				onMouseLeave={this.handleMouseLeave.bind(this)} style={{display : "inline-block"}}>
-				<div style={textStyle}>{this.props.text}</div>
-				<div style={markerStyle}/>
+				<div className='sectionText' style={textStyle}>{this.props.text}</div>
+				<div className='marker' style={markerStyle}/>
 			</div>
 		);
 	}

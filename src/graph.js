@@ -76,6 +76,11 @@ export default class Graph{
 		for(let v of this.v){
 			v.setPos(v.x * factorX, v.y * factorY);
 		}
+		for(let e of this.e){
+			e.curveX = e.curveX * factorX;
+			e.curveY = e.curveY * factorY;
+			e.cacheControlPoints();
+		}
 		this.cache();
 	}
 

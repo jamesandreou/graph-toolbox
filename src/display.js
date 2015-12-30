@@ -5,8 +5,9 @@ import PanelTools from './paneltools';
 
 export default class Display{
 
-	constructor(){
-		this.g = new Graph();
+	constructor(app, g){
+		this.app = app;
+		this.g = g;
 		this.gen = new Generator(this.g);
 		this.tools = new PanelTools(this.g);
 		this.algs =  new Algorithm(this.g);
@@ -18,7 +19,7 @@ export default class Display{
 		this.ctx = ref.getContext('2d');
 		this.dim = {width : ref.width, height: ref.height, 
 			off : ref.getBoundingClientRect()};
-		this.gen.bidiakisCube(this.dim);
+		this.gen.test(this.dim);
 	}
 
 	executeCommand(section, cmd){
@@ -72,6 +73,7 @@ export default class Display{
 		this.ctx.lineTo(this.dim.width, 400);
 		this.ctx.stroke();
 		this.g.draw(this.ctx, this.dim, this.bound.obj);
+		this.app.update();
 	}
 
 	handleMouseDown(e){
@@ -115,10 +117,11 @@ export default class Display{
 	    			let selectDirection = this.selectObject(x, y);
 	    			if(selectDirection.type === 'v' && 
 	    				(this.bound.obj.v1 === selectDirection.obj || this.bound.obj.v2 === selectDirection.obj)){
-	    				this.bound.obj.dir = selectDirection.obj;
+	    			this.bound.obj.dir = selectDirection.obj;
 	    			this.bound.obj = null;
 	    			this.bound.type = null;
 	    			}else{
+	    				this.bound.obj.dir = null;
 	    				this.bound = selectDirection;
 	    			}
 	    		}else{

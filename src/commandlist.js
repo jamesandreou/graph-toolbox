@@ -22,8 +22,8 @@ export default class CommandList{
 				},
 				topo : {
 					name : 'Topological Ordering',
-					desc : 'If possible sort the graph topologically.',
-					req : this.noReq
+					desc : 'Topologically sort vertices. REQUIRES: All Directed Edges',
+					req : this.diretedEdges
 				}
 			},
 			Tools : {
@@ -49,6 +49,13 @@ export default class CommandList{
 	}
 
 	noReq(g){
+		return true;
+	}
+
+	diretedEdges(g){
+		for(let e of g.e){
+			if(e.dir === null) return false;
+		}
 		return true;
 	}
 

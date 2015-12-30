@@ -18,28 +18,20 @@ export class Tool extends Component{
 	}
 
 	render(){
-		let svgStyle = {
-	      verticalAlign: "middle",
-	    };
 	    let style = {
-			width : "100%",
-			textAlign: "center",
-			cursor : "pointer",
 			height : this.props.size
 		};
 		let markerStyle = {
-			width : "3%",
-			height : this.props.size * 0.8,
-			background : "#84bd00",
-			position : "absolute",
-			left : "0"
+			height : this.props.size * 0.8
 		};
-		let marker = (<div style={markerStyle} />);
+		let marker = (<div className='toolMarker' style={markerStyle} />);
 		return (
-			<div onClick={this.props.onClickEvent} onMouseEnter={this.handleMouseEnter.bind(this)} 
-				onMouseLeave={this.handleMouseLeave.bind(this)} style={style}>
+			<div onClick={this.props.onClickEvent} className='tool' style={style}
+				onMouseEnter={this.handleMouseEnter.bind(this)} 
+				onMouseLeave={this.handleMouseLeave.bind(this)}>
 				{(this.props.active ? marker : null)}
-				<svg viewBox="0 0 64 64" width={this.props.size * 0.8} height={this.props.size * 0.8} preserveAspectRatio="xMidYMid meet" fitstyle={svgStyle}>
+				<svg viewBox="0 0 64 64" width={this.props.size * 0.8} height={this.props.size * 0.8} 
+					preserveAspectRatio="xMidYMid meet" fitstyle={{verticalAlign: "middle"}}>
 					{this.renderIcon(this.props.type)}
 				</svg>
 			</div>

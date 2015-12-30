@@ -16,6 +16,15 @@ export default class graphGenerator{
 		}
 	}
 
+	test(dim){
+		this.g.addVertice(dim, 5, 30, 0);
+		this.g.addVertice(dim, 50, 5, 1);
+		this.g.addVertice(dim, 95, 30, 2);
+		this.g.addEdge(0, 1, 0, null, 1, 0);
+		this.g.addEdge(1, 2, 0, null, 1, 0);
+		this.g.addEdge(0, 2, 0, null, 1, 0);
+	}
+
 	clear(){
 		this.g.v = [];
 		this.g.e = [];
