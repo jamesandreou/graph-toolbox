@@ -21,7 +21,7 @@ export default class Display{
 		this.ctx = ref.getContext('2d');
 		this.dim = {width : ref.width, height: ref.height, 
 			off : ref.getBoundingClientRect()};
-		this.gen.test(this.dim);
+		this.gen.bigPlanarGraph(this.dim);
 	}
 
 	executeCommand(section, cmd){
