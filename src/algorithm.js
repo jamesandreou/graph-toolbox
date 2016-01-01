@@ -93,4 +93,8 @@ export default class Algorithm{
 	    }
 	}
 
+	topologicalSort(){
+		
+	}
+
 }
