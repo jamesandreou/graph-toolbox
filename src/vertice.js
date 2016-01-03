@@ -31,19 +31,20 @@ export default class Vertice{
 
 	draw(ctx, dim, bound){
 		let r = Math.min(dim.width, dim.height) / 40;
-		ctx.font = 'bolder ' + (r * 1.25) + 'px Georgia';
+		ctx.font = 'bold ' + (r * 1.25) + 'px Courier New';
 		ctx.textBaseline = 'middle';
 		ctx.textAlign = 'center';
 		ctx.fillStyle = this.col;
 		ctx.strokeStyle = '#000000';
-		ctx.lineWidth = bound ? 4 : 2;
+		let lineFactor = (window.innerWidth < 1000) ? 1 : 2;
+		ctx.lineWidth = bound ? 2 * lineFactor : 1 * lineFactor;
 		ctx.beginPath();
 		ctx.arc(this.x, this.y, r, 0, Math.PI * 2, false);
 		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();
 		ctx.fillStyle = '#000000';
-		ctx.fillText(this.label, this.x, this.y);
+		ctx.fillText(this.label, this.x , this.y);
 	}
 
 }

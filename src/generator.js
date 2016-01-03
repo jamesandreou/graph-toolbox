@@ -13,6 +13,9 @@ export default class graphGenerator{
 			case 'cube':
 				this.bidiakisCube(dim);
 				break;
+			case 'planar':
+				this.bigPlanarGraph(dim);
+				break;
 		}
 	}
 
@@ -90,8 +93,8 @@ export default class graphGenerator{
 		this.g.addEdge(3, 4, null, null, 0, 0);
 		this.g.addEdge(4, 5, null, null, 0, 0);
 		this.g.addEdge(0, 3, null, null, 0, 0);
-		this.g.addEdge(1, 4, null, null, -327, -100);
-		this.g.addEdge(2, 5, null, null, 280, -75);
+		this.g.addEdge(1, 4, null, null, 0, 0);
+		this.g.addEdge(2, 5, null, null, 0, 0);
 		this.g.addEdge(6, 7, null, null, 115, 260);
 		this.g.addEdge(7, 8, null, null, -184, 181);
 		this.g.addEdge(9, 10, null, null, 15, -215);
@@ -99,7 +102,7 @@ export default class graphGenerator{
 		this.g.addEdge(6, 9, null, null, 0, 0);
 		this.g.addEdge(7, 10, null, null, 0, 0);
 		this.g.addEdge(8, 11, null, null, 56, 1);
-		this.g.addEdge(0, 6, null, null, -55, -75);
+		this.g.addEdge(0, 6, null, null, 55, 0);
 		this.g.addEdge(2, 9, null, null, 0, 0);
 		this.g.addEdge(3, 8, null, null, 0, 0);
 		this.g.addEdge(5, 11, null, null, -68, -108);

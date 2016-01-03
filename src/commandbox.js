@@ -8,8 +8,8 @@ export class CommandBox extends Component{
 		super();
 		this.box = {
 			Algorithms : ['planar', 'mincov', 'topo', 'mst'],
-			Tools : ['center'],
-			Graphs : ['k5', 'cube']
+			Tools : ['center', 'clear'],
+			Graphs : ['k5', 'cube', 'planar']
 		};
 	}
 

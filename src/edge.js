@@ -30,7 +30,8 @@ export default class Edge{
 	draw(ctx, dim, bound){
 		let r = Math.min(dim.width, dim.height) / 40;
 		ctx.strokeStyle = this.col;
-		ctx.lineWidth = bound ? 4 : 2;
+		let lineFactor = (window.innerWidth < 1000) ? 1 : 2;
+		ctx.lineWidth = bound ? 2 * lineFactor : 1 * lineFactor;
 		ctx.beginPath();
 		ctx.moveTo(this.v1.x, this.v1.y);
 		ctx.quadraticCurveTo(this.c1, this.c2, this.v2.x, this.v2.y);

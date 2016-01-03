@@ -9,6 +9,9 @@ export default class PanelTools{
 			case 'center' :
 				this.centerGraph(dim);
 				break;
+			case 'clear' :
+				this.clearGraph();
+				break;
 		}
 	}
 
@@ -30,6 +33,11 @@ export default class PanelTools{
 			v.x = shiftX + v.x - minx;
 			v.y = shiftY + v.y - miny;
 		}
+	}
+
+	clearGraph(){
+		this.g.v = [];
+		this.g.e = [];
 	}
 
 }

@@ -31,6 +31,11 @@ export default class CommandList{
 					name : 'Center Graph',
 					desc : 'Center current graph on display.',
 					req : this.noReq
+				},
+				clear : {
+					name : 'Clear Display',
+					desc : 'Clear every edge and vertice on the display.',
+					req : this.noReq
 				}
 			},
 			Graphs : {
@@ -42,6 +47,11 @@ export default class CommandList{
 				k5 : {
 					name : 'K5',
 					desc : '5 Vertice complete graph, NOT Planar',
+					req : this.noReq
+				},
+				planar : {
+					name : 'Big Planar Graph',
+					desc : 'Graph to demonstrate planarity test.',
 					req : this.noReq
 				}
 			}
@@ -143,6 +153,14 @@ export default class CommandList{
 					<path d="m35.86,55.983,1.514-1.5353,8.2773,8.1625,2.0406-2.0693-8.2773-8.1625,1.536-1.5576-7.0397-1.807,1.9491,6.9692z"/>
 					<path d="m29.403,40.04-1.514,1.5353-8.2773-8.1625-2.0406,2.0693,8.2773,8.1625-1.536,1.5576,7.0397,1.807-1.9491-6.9692z"/>
 					<path d="m29.403,55.849-1.514-1.5353-8.2773,8.1625-2.0406-2.0693,8.2773-8.1625-1.536-1.5576,7.0397-1.807-1.9491,6.9692z"/>
+					</g>
+				);
+			case 'clear':
+				return(
+					<g id="layer1" transform="translate(0 -1020.4)" stroke="#fff" fill="none">
+					<rect id="rect4684" height="28.84" width="28.84" y="1021.9" x="17.58" strokeWidth="1.1602"/>
+					<path id="path4686" d="m39.693 1027-16.271 18.796" strokeWidth="1.2"/>
+					<path id="path4688" d="m23.422 1027 16.271 18.796" strokeWidth="1.2"/>
 					</g>
 				);
 		}
