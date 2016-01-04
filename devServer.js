@@ -4,12 +4,14 @@ var webpack = require('webpack');
 var config = require('./webpack.config.dev');
 var bodyParser = require("body-parser");
 var planar = require('./build/Release/planar.node');
+var favicon = require('serve-favicon');
 
 var app = express();
 app.use(bodyParser.json());      
 app.use(bodyParser.urlencoded({    
   extended: false
 }));
+app.use(favicon(path.join(__dirname, 'favicon.ico')));
 
 var compiler = webpack(config);
 
