@@ -11,7 +11,7 @@
   },
   "author": "James Andreou <jandreou25@gmail.com> (http://github.com/jamesandreou)",
   "homepage": "https://github.com/gaearon/react-transform-boilerplate",
-  "devDependencies": {
+  "dependencies": {
     "babel-core": "^6.3.15",
     "babel-eslint": "^5.0.0-beta4",
     "babel-loader": "^6.2.0",
@@ -22,7 +22,6 @@
     "eslint": "^1.10.3",
     "eslint-plugin-babel": "^3.0.0",
     "eslint-plugin-react": "^3.11.3",
-    "express": "^4.13.3",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
     "redbox-react": "^1.0.1",
@@ -30,11 +29,10 @@
     "style-loader": "^0.13.0",
     "webpack": "^1.12.9",
     "webpack-dev-middleware": "^1.4.0",
-    "webpack-hot-middleware": "^2.6.0"
-  },
-  "dependencies": {
+    "webpack-hot-middleware": "^2.6.0",
     "body-parser": "^1.14.2",
     "ejs": "^2.3.1",
+    "express": "^4.13.3",
     "nan": "^2.1.0",
     "node-gyp": "^3.2.1",
     "react": "^0.14.3",
