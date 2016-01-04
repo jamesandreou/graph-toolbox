@@ -13,17 +13,17 @@ export default class CommandList{
 				mincov : {
 					name : 'Minimum Vertex Cover',
 					desc : 'Find a cover with as few vertices as possible.',
-					req : this.noReq
+					req : this.notImplementedYet
 				},
 				mst : {
 					name : 'Minimum Spanning Tree',
 					desc : 'Find the minimum spanning tree of the graph.',
-					req : this.noReq
+					req : this.notImplementedYet
 				},
 				topo : {
 					name : 'Topological Ordering',
 					desc : 'Topologically sort vertices. REQUIRES: All Directed Edges',
-					req : this.diretedEdges
+					req : this.notImplementedYet
 				}
 			},
 			Tools : {
@@ -61,6 +61,10 @@ export default class CommandList{
 
 	noReq(g){
 		return true;
+	}
+
+	notImplementedYet(g){
+		return false;
 	}
 
 	diretedEdges(g){
