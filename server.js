@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
+app.set('port', (process.env.PORT || 5000));
 
 var compiler = webpack(config);
 
@@ -22,11 +23,11 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler));
 
-app.get('*', function(req, res) {
+app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(3000, 'localhost', function(err) {
+app.listen(app.get('port'), function(err) {
   if (err) {
     console.log(err);
     return;
